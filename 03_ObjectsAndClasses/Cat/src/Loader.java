@@ -5,7 +5,7 @@ public class Loader
     public static void main(String[] args) {
         while (true) {
             System.out.println("1 - Create new cats\n2 - Feed the cats\n3 - Blow up a cat\n" +
-                    "4 - Get meow cat\nEnter method number: ");
+                    "4 - Get meow cat\n5 - Weight food\nEnter method number: ");
 
             Scanner scanner = new Scanner(System.in);
             int chooseNumber = scanner.nextInt();
@@ -25,6 +25,10 @@ public class Loader
                 }
                 case 4: {
                     getMeowCat();
+                    break;
+                }
+                case 5: {
+                    getWeightFood();
                     break;
                 }
             }
@@ -87,6 +91,7 @@ public class Loader
         }
 
         System.out.println("Charlie last weight: " + charlie.getWeight() + ". Charlie is exploded :(");
+        System.out.println("Weight food: " + charlie.getSumWeightFood());
     }
 
     public static void getMeowCat() {
@@ -97,6 +102,21 @@ public class Loader
         }
 
         System.out.println("Murka last weight: " + murka.getWeight() + ". Murka is dead :(");
+    }
+
+    public static void getWeightFood()
+    {
+        Cat murka = new Cat();
+//        for (int i = 0; i < 5; i++){
+//            murka.feed(Math.random() * 100);
+//        }
+        murka.feed(150.0);
+
+        for (int i = 0; i < 3; i++){
+            murka.pee();
+        }
+
+        System.out.println("Weight food for Murka: " + murka.getSumWeightFood());
     }
 
 }
