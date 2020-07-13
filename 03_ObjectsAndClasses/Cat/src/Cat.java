@@ -1,6 +1,8 @@
 
 public class Cat
 {
+    public static int count;
+
     private double originWeight;
     private double weight;
 
@@ -8,38 +10,32 @@ public class Cat
     private double maxWeight;
     private double weightFood;
 
-    public Cat()
-    {
+    public Cat() {
         weight = 1500.0 + 3000.0 * Math.random();
         originWeight = weight;
         minWeight = 1000.0;
         maxWeight = 9000.0;
     }
 
-    public void meow()
-    {
+    public void meow() {
         weight = weight - 1;
         System.out.println("Meow");
     }
 
-    public void feed(Double amount)
-    {
+    public void feed(Double amount) {
         weight = weight + amount;
         weightFood = amount;
     }
 
-    public void drink(Double amount)
-    {
+    public void drink(Double amount) {
         weight = weight + amount;
     }
 
-    public Double getWeight()
-    {
+    public Double getWeight() {
         return weight;
     }
 
-    public String getStatus()
-    {
+    public String getStatus() {
         if(weight < minWeight) {
             return "Dead";
         }
@@ -54,14 +50,16 @@ public class Cat
         }
     }
 
-    public Double getSumWeightFood()
-    {
+    public Double getSumWeightFood() {
         return weightFood;
     }
 
-    public void pee()
-    {
+    public void pee() {
         weight = weight - Math.random() * 10;
         System.out.println("Pee");
+    }
+
+    public static int getCount() {
+        return count;
     }
 }
