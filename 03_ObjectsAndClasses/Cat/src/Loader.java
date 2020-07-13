@@ -74,7 +74,9 @@ public class Loader
             charlie.feed(1000.0);
         }
 
-        Cat.count -= 1;
+        if (!charlie.getStatus().equals("Dead")) {
+            Cat.count -= 1;
+        }
 
         System.out.println("Charlie last weight: " + charlie.getWeight() + ". Charlie is exploded :(");
         System.out.println("Weight food: " + charlie.getSumWeightFood());
@@ -88,7 +90,9 @@ public class Loader
             murka.meow();
         }
 
-        Cat.count -= 1;
+        if (!murka.getStatus().equals("Dead")) {
+            Cat.count -= 1;
+        }
 
         System.out.println("Murka last weight: " + murka.getWeight() + ". Murka is dead :(");
         System.out.println(Cat.count);
