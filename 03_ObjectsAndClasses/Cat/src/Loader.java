@@ -6,7 +6,13 @@ public class Loader
         ExplodeCat();
         MeowCat();
         WeightFood();
-        System.out.println("Всего кошек: " + Cat.getCount());
+        System.out.println("Sum cats: " + Cat.getCount());
+        Cat myauchello = getKitten();
+        Cat vasichello = getKitten();
+        Cat lolachello = getKitten();
+        System.out.println("myauchello - " + myauchello.getWeight());
+        System.out.println("vasichello - " + vasichello.getWeight());
+        System.out.println("lolachello - " + lolachello.getWeight());
     }
 
     public static void printNewCats() {
@@ -114,4 +120,9 @@ public class Loader
 
         System.out.println("Weight food for Murka: " + murka.getSumWeightFood());
     }
+
+    private static Cat getKitten() {
+        return new Cat(1100.0);
+    }
+
 }

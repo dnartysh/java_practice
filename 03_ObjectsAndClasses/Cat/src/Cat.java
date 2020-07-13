@@ -21,6 +21,11 @@ public class Cat
         maxWeight = 9000.0;
     }
 
+    public Cat(Double weight) {
+        this();
+        this.weight = weight;
+    }
+
     public void meow() {
         if (!getStatus().equals("Dead")) {
             weight = weight - 1;
