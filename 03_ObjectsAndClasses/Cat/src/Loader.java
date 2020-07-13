@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 public class Loader
 {
     public static void main(String[] args) {
@@ -6,18 +8,10 @@ public class Loader
         explodeCat();
         MeowCat();
         WeightFood();
+        createNewKitten();
+        createSomeCats();
+        createNewCatWithColor();
         System.out.println("Sum cats: " + Cat.getCount());
-
-        Cat myauchello = getKitten();
-        Cat vasichello = getKitten();
-        Cat lolachello = getKitten();
-        System.out.println("myauchello - " + myauchello.getWeight());
-        System.out.println("vasichello - " + vasichello.getWeight());
-        System.out.println("lolachello - " + lolachello.getWeight());
-
-        Cat bugawuga = new Cat();
-        bugawuga.setColor(Colors.BLACK);
-        System.out.println("bugawuga has " + bugawuga.getColor() + " color :)");
     }
 
     public static void printNewCats() {
@@ -130,4 +124,36 @@ public class Loader
         return new Cat(1100.0);
     }
 
+    public static void createNewKitten() {
+        Cat myauchello = getKitten();
+        Cat vasichello = getKitten();
+        Cat lolachello = getKitten();
+        System.out.println("myauchello - " + myauchello.getWeight());
+        System.out.println("vasichello - " + vasichello.getWeight());
+        System.out.println("lolachello - " + lolachello.getWeight());
+    }
+
+    public static void createNewCatWithColor() {
+        Cat bugawuga = new Cat();
+        bugawuga.setColor(Colors.BLACK);
+        System.out.println("bugawuga has " + bugawuga.getColor() + " color :)");
+    }
+
+    public static void createSomeCats() {
+        Cat ugawuga = new Cat();
+        ugawuga.setName("UgaWuga");
+        ugawuga.setColor(Colors.ORANGE);
+
+        Cat bryuho = new Cat(ugawuga.getWeight());
+        bryuho.catName = ugawuga.catName;
+        bryuho.setColor(ugawuga.getColor());
+
+        System.out.println(ugawuga.getName());
+        System.out.println(ugawuga.getColor());
+        System.out.println(ugawuga.getWeight());
+
+        System.out.println(bryuho.getName());
+        System.out.println(bryuho.getColor());
+        System.out.println(bryuho.getWeight());
+    }
 }

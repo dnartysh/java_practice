@@ -1,5 +1,3 @@
-import java.awt.Color;
-
 public class Cat
 {
     public static final int COUNT_EYES = 2;
@@ -11,6 +9,7 @@ public class Cat
 
     private double originWeight;
     private double weight;
+    public String catName;
 
     private double minWeight;
     private double maxWeight;
@@ -97,5 +96,13 @@ public class Cat
 
     public Colors getColor() {
         return color;
+    }
+    
+    public void setName(String catName) {
+        this.catName = catName;
+    }
+
+    public String getName() {
+        return catName;
     }
 }
