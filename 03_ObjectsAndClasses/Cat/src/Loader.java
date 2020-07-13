@@ -3,16 +3,21 @@ public class Loader
     public static void main(String[] args) {
         printNewCats();
         FeedCat();
-        ExplodeCat();
+        explodeCat();
         MeowCat();
         WeightFood();
         System.out.println("Sum cats: " + Cat.getCount());
+
         Cat myauchello = getKitten();
         Cat vasichello = getKitten();
         Cat lolachello = getKitten();
         System.out.println("myauchello - " + myauchello.getWeight());
         System.out.println("vasichello - " + vasichello.getWeight());
         System.out.println("lolachello - " + lolachello.getWeight());
+
+        Cat bugawuga = new Cat();
+        bugawuga.setColor(Colors.BLACK);
+        System.out.println("bugawuga has " + bugawuga.getColor() + " color :)");
     }
 
     public static void printNewCats() {
@@ -70,7 +75,7 @@ public class Loader
         System.out.println("Vasya weight after feed: " + vasya.getWeight());
     }
 
-    public static void ExplodeCat() {
+    public static void explodeCat() {
         Cat charlie = new Cat();
         Cat.count++;
 

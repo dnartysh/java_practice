@@ -1,3 +1,4 @@
+import java.awt.Color;
 
 public class Cat
 {
@@ -5,6 +6,7 @@ public class Cat
     public static final int MIN_WEIGHT = 100;
     public static final int MAX_WEIGHT = 1500;
 
+    public Colors color;
     public static int count;
 
     private double originWeight;
@@ -87,5 +89,13 @@ public class Cat
 
     public static int getCount() {
         return count;
+    }
+
+    public void setColor(Colors color) {
+        this.color = color;
+    }
+
+    public Colors getColor() {
+        return color;
     }
 }
