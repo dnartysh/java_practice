@@ -18,17 +18,32 @@ public class Cat
     }
 
     public void meow() {
-        weight = weight - 1;
-        System.out.println("Meow");
+        if (!getStatus().equals("Dead")) {
+            weight = weight - 1;
+            System.out.println("Meow");
+        }
+        else {
+            System.out.println("Cat is dead :(");
+        }
     }
 
     public void feed(Double amount) {
-        weight = weight + amount;
-        weightFood = amount;
+        if (!getStatus().equals("Dead")) {
+            weight = weight + amount;
+            weightFood += amount;
+        }
+        else {
+            System.out.println("Cat is dead :(");
+        }
     }
 
     public void drink(Double amount) {
-        weight = weight + amount;
+        if (!getStatus().equals("Dead")) {
+            weight = weight + amount;
+        }
+        else {
+            System.out.println("Cat is dead :(");
+        }
     }
 
     public Double getWeight() {
@@ -55,8 +70,10 @@ public class Cat
     }
 
     public void pee() {
-        weight = weight - Math.random() * 10;
-        System.out.println("Pee");
+        if (!getStatus().equals("Dead")) {
+            weight = weight - Math.random() * 10;
+            System.out.println("Pee");
+        }
     }
 
     public static int getCount() {
