@@ -3,21 +3,20 @@ import java.awt.Color;
 public class Loader
 {
     public static void main(String[] args) {
-        printNewCats();
-        FeedCat();
-        explodeCat();
-        MeowCat();
-        WeightFood();
-        createNewKitten();
+//        printNewCats();
+//        FeedCat();
+//        explodeCat();
+//        MeowCat();
+//        WeightFood();
+//        createNewKitten();
         createSomeCats();
-        createNewCatWithColor();
-        System.out.println("Sum cats: " + Cat.getCount());
+//        createNewCatWithColor();
+//        System.out.println("Sum cats: " + Cat.getCount());
     }
 
     public static void printNewCats() {
         // Murka
         Cat murka = new Cat();
-        Cat.count++;
 
         System.out.println("Murka weight before drink: " + murka.getWeight());
         murka.drink(murka.getWeight() / 100);
@@ -25,7 +24,6 @@ public class Loader
 
         // Vasya
         Cat vasya = new Cat();
-        Cat.count++;
 
         System.out.println("Vasya weight before feed: " + vasya.getWeight());
         vasya.feed(Math.random() * 100);
@@ -33,19 +31,16 @@ public class Loader
 
         // Mater
         Cat mater = new Cat();
-        Cat.count++;
 
         System.out.println("Mater: " + mater.getStatus());
 
         // Charlie
         Cat charlie = new Cat();
-        Cat.count++;
 
         System.out.println("Charlie weight: " + charlie.getWeight());
 
         // Sumrak
         Cat sumrak = new Cat();
-        Cat.count++;
 
         System.out.println("Sumrak weight before meow:" + sumrak.getWeight());
         System.out.print("Sumrak: ");
@@ -55,14 +50,12 @@ public class Loader
 
     public static void FeedCat() {
         Cat murka = new Cat();
-        Cat.count++;
 
         System.out.println("Murka weight before feed: " + murka.getWeight());
         murka.feed(murka.getWeight() / 100);
         System.out.println("Murka weight after feed: " + murka.getWeight());
 
         Cat vasya = new Cat();
-        Cat.count++;
 
         System.out.println("Vasya weight before feed: " + vasya.getWeight());
         vasya.feed(150.0);
@@ -71,14 +64,9 @@ public class Loader
 
     public static void explodeCat() {
         Cat charlie = new Cat();
-        Cat.count++;
 
         while (!charlie.getStatus().equals("Exploded")) {
             charlie.feed(1000.0);
-        }
-
-        if (charlie.getStatus().equals("Exploded")) {
-            Cat.count--;
         }
 
         System.out.println("Charlie last weight: " + charlie.getWeight() + ". Charlie is exploded :(");
@@ -87,7 +75,6 @@ public class Loader
 
     public static void MeowCat() {
         Cat murka = new Cat();
-        Cat.count++;
 
         while (!murka.getStatus().equals("Dead")) {
             murka.meow();
@@ -96,18 +83,12 @@ public class Loader
         murka.meow();
         murka.meow();
 
-        if (murka.getStatus().equals("Dead")) {
-            Cat.count--;
-        }
-
         System.out.println("Murka last weight: " + murka.getWeight() + ". Murka is dead :(");
         System.out.println(Cat.count);
     }
 
     public static void WeightFood() {
         Cat murka = new Cat();
-
-        Cat.count++;
 
         for (int i = 0; i < 3; i++){
             murka.feed(Math.random() * 100);
@@ -121,7 +102,7 @@ public class Loader
     }
 
     private static Cat getKitten() {
-        return new Cat(1100.0);
+        return new Cat();
     }
 
     public static void createNewKitten() {
@@ -141,19 +122,9 @@ public class Loader
 
     public static void createSomeCats() {
         Cat ugawuga = new Cat();
-        ugawuga.setName("UgaWuga");
-        ugawuga.setColor(Colors.ORANGE);
+        Cat bryuho = new Cat(ugawuga);
 
-        Cat bryuho = new Cat(ugawuga.getWeight());
-        bryuho.catName = ugawuga.catName;
-        bryuho.setColor(ugawuga.getColor());
-
-        System.out.println(ugawuga.getName());
-        System.out.println(ugawuga.getColor());
-        System.out.println(ugawuga.getWeight());
-
-        System.out.println(bryuho.getName());
-        System.out.println(bryuho.getColor());
-        System.out.println(bryuho.getWeight());
+        System.out.println("ugawuga weight: " + ugawuga.getWeight());
+        System.out.println("bryuho weight: " + bryuho.getWeight());
     }
 }

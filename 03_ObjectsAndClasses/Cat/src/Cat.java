@@ -1,8 +1,10 @@
+import java.util.Random;
+
 public class Cat
 {
     public static final int COUNT_EYES = 2;
-    public static final int MIN_WEIGHT = 100;
-    public static final int MAX_WEIGHT = 1500;
+    public static final double MIN_WEIGHT = 1000.0;
+    public static final double MAX_WEIGHT = 9000.0;
 
     public Colors color;
     public static int count;
@@ -11,20 +13,29 @@ public class Cat
     private double weight;
     public String catName;
 
-    private double minWeight;
-    private double maxWeight;
     private double weightFood;
 
     public Cat() {
-        weight = 1500.0 + 3000.0 * Math.random();
-        originWeight = weight;
-        minWeight = 1000.0;
-        maxWeight = 9000.0;
+        this(1500.0 + 3000.0 * Math.random(), "");
     }
 
-    public Cat(Double weight) {
-        this();
-        this.weight = weight;
+    public Cat(Cat Cat) {
+        this(Cat.weight, Cat.catName);
+    }
+
+    public Cat(double weight, String catName) {
+        if (weight > MAX_WEIGHT) {
+            System.out.println("Too much weight");
+        }
+        else if (weight < MIN_WEIGHT) {
+            System.out.println("Too little weight");
+        }
+        else {
+            this.weight = weight;
+            this.catName = catName;
+            this.originWeight = weight;
+            count++;
+        }
     }
 
     public void meow() {
@@ -61,10 +72,12 @@ public class Cat
     }
 
     public String getStatus() {
-        if(weight < minWeight) {
+        if(weight < MIN_WEIGHT) {
+            count--;
             return "Dead";
         }
-        else if(weight > maxWeight) {
+        else if(weight > MAX_WEIGHT) {
+            count--;
             return "Exploded";
         }
         else if(weight > originWeight) {
