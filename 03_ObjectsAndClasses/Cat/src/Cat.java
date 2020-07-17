@@ -11,6 +11,7 @@ public class Cat
 
     private double originWeight;
     private double weight;
+    private double lastWeight;
     public String catName;
 
     private double weightFood;
@@ -19,8 +20,8 @@ public class Cat
         this(1500.0 + 3000.0 * Math.random(), "");
     }
 
-    public Cat(Cat Cat) {
-        this(Cat.weight, Cat.catName);
+    public Cat(Cat cat) {
+        this(cat.weight, cat.catName);
     }
 
     public Cat(double weight, String catName) {
@@ -31,6 +32,7 @@ public class Cat
             System.out.println("Too little weight");
         }
         else {
+            this.lastWeight = weight;
             this.weight = weight;
             this.catName = catName;
             this.originWeight = weight;
@@ -38,10 +40,21 @@ public class Cat
         }
     }
 
+    public Cat createTwin()
+    {
+        return new Cat(this);
+    }
+    
     public void meow() {
         if (!getStatus().equals("Dead")) {
+            lastWeight = weight;
             weight = weight - 1;
             System.out.println("Meow");
+
+            if (lastWeight > MIN_WEIGHT && weight < MIN_WEIGHT) {
+                count--;
+                lastWeight = weight;
+            }
         }
         else {
             System.out.println("Cat is dead :(");
@@ -49,9 +62,15 @@ public class Cat
     }
 
     public void feed(Double amount) {
-        if (!getStatus().equals("Dead")) {
+        if (!getStatus().equals("Exploded")) {
+            lastWeight = weight;
             weight = weight + amount;
             weightFood += amount;
+
+            if (lastWeight < MAX_WEIGHT && weight > MAX_WEIGHT) {
+                count--;
+                lastWeight = weight;
+            }
         }
         else {
             System.out.println("Cat is dead :(");
@@ -59,8 +78,14 @@ public class Cat
     }
 
     public void drink(Double amount) {
-        if (!getStatus().equals("Dead")) {
+        if (!getStatus().equals("Exploded")) {
+            lastWeight = weight;
             weight = weight + amount;
+
+            if (lastWeight < MAX_WEIGHT && weight > MAX_WEIGHT) {
+                count--;
+                lastWeight = weight;
+            }
         }
         else {
             System.out.println("Cat is dead :(");
@@ -73,11 +98,9 @@ public class Cat
 
     public String getStatus() {
         if(weight < MIN_WEIGHT) {
-            count--;
             return "Dead";
         }
         else if(weight > MAX_WEIGHT) {
-            count--;
             return "Exploded";
         }
         else if(weight > originWeight) {

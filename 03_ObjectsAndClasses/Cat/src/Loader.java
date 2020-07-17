@@ -121,10 +121,36 @@ public class Loader
     }
 
     public static void createSomeCats() {
-        Cat ugawuga = new Cat();
-        Cat bryuho = new Cat(ugawuga);
+//        Cat ugawuga = new Cat();
+//        Cat bryuho = new Cat(ugawuga);
+//
+//        System.out.println("ugawuga weight: " + ugawuga.getWeight());
+//        System.out.println("bryuho weight: " + bryuho.getWeight());
 
-        System.out.println("ugawuga weight: " + ugawuga.getWeight());
-        System.out.println("bryuho weight: " + bryuho.getWeight());
+        Cat ugawuga = new Cat();
+        Cat ugawugaClone = ugawuga.createTwin();
+
+        System.out.println("ugawuga       weight: " + ugawuga.getWeight());
+        System.out.println("ugawuga clone weight: " + ugawugaClone.getWeight());
+        ugawugaClone.feed(100.0);
+        System.out.println("ugawuga eaten food: " + ugawuga.getSumWeightFood());
+        System.out.println("ugawuga clone eaten food: " + ugawugaClone.getSumWeightFood());
+
+        System.out.println("Count cats: " + Cat.getCount());
+
+//        Cat murka = new Cat();
+//        murka.feed(100000.0);
+//
+//        for (int i = 0; i < 3000; i++) {
+//            murka.meow();
+//        }
+//
+//        System.out.printf("Count cats: %d%n", Cat.getCount());
+//
+//        System.out.printf("Murka status: %s%n", murka.getStatus());
+//        System.out.printf("Count cats: %d%n", Cat.getCount());
+//        // ничего не дожно измениться:
+//        System.out.printf("Murka status: %s%n", murka.getStatus());
+//        System.out.printf("Count cats: %d%n", Cat.getCount());
     }
 }
