@@ -1,41 +1,22 @@
 public class Main {
     public static void main(String[] args)
     {
-
-        double valueDoubleMin = Double.MIN_VALUE;
-        double valueDoubleMax = Double.MAX_VALUE;
-
-        float valueFloatMin = Float.MIN_VALUE;
-        float valueFloatMax = Float.MAX_VALUE;
-
-        byte valueByteMin = Byte.MIN_VALUE;
-        byte valueByteMax = Byte.MAX_VALUE;
-
-        int valueIntMin = Integer.MIN_VALUE;
-        int valueIntMax = Integer.MAX_VALUE;
-
-        short valueShortMin = Short.MIN_VALUE;
-        short valueShortMax = Short.MAX_VALUE;
-
-        long valueLongMin = Long.MIN_VALUE;
-        long valueLongMax = Long.MAX_VALUE;
-
         // Double
-        System.out.println("Min value double: " + valueDoubleMin + " \nMax value double: " + valueDoubleMax + "\n");
+        System.out.println("Min value double: " + (-Double.MAX_VALUE) + " \nMax value double: " + Double.MAX_VALUE + "\n");
 
         // Float
-        System.out.println("Min value float: " + valueFloatMin + " \nMax value float: " + valueFloatMax + "\n");
+        System.out.println("Min value float: " + (-Float.MAX_VALUE) + " \nMax value float: " + Float.MAX_VALUE + "\n");
 
         // Byte
-        System.out.println("Min value byte: " + valueByteMin + " \nMax value byte: " + valueByteMax + "\n");
+        System.out.println("Min value byte: " + Byte.MIN_VALUE + " \nMax value byte: " + Byte.MAX_VALUE + "\n");
 
         // Int
-        System.out.println("Min value int: " + valueIntMin + " \nMax value int: " + valueIntMax + "\n");
+        System.out.println("Min value int: " + Integer.MIN_VALUE + " \nMax value int: " + Integer.MAX_VALUE + "\n");
 
         // Short
-        System.out.println("Min value short: " + valueShortMin + " \nMax value short: " + valueShortMax + "\n");
+        System.out.println("Min value short: " + Short.MIN_VALUE + " \nMax value short: " + Short.MAX_VALUE + "\n");
 
         // Long
-        System.out.println("Min value long: " + valueLongMin + " \nMax value long: " + valueLongMax + "\n");
+        System.out.println("Min value long: " + Long.MIN_VALUE + " \nMax value long: " + Long.MAX_VALUE + "\n");
     }
 }
