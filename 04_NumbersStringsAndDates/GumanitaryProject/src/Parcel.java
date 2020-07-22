@@ -14,11 +14,11 @@ public class Parcel {
     }
 
     private void generateContainers() {
-        countContainers = (int) ((double) (countBoxes) / (double) (MAX_COUNT_BOXES));
+        countContainers = (int) Math.ceil((double) (countBoxes) / (double) (MAX_COUNT_BOXES));
     }
 
     private void generateTrucks() {
-        countTrucks = (int) ((double) (countContainers) / (double) (MAX_COUNT_CONTAINERS));
+        countTrucks = (int) Math.ceil((double) (countContainers) / (double) (MAX_COUNT_CONTAINERS));
     }
 
     public void printListParcel() {
