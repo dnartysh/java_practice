@@ -14,21 +14,11 @@ public class Parcel {
     }
 
     private void generateContainers() {
-        if (countBoxes > MAX_COUNT_BOXES) {
-            countContainers = countBoxes / MAX_COUNT_BOXES;
-            if (countBoxes % MAX_COUNT_BOXES != 0) {
-                countContainers++;
-            }
-        }
+        countContainers = (int) ((double) (countBoxes) / (double) (MAX_COUNT_BOXES));
     }
 
     private void generateTrucks() {
-        if (countContainers > MAX_COUNT_CONTAINERS) {
-            countTrucks = countContainers / MAX_COUNT_CONTAINERS;
-            if (countContainers % MAX_COUNT_CONTAINERS != 0) {
-                countTrucks++;
-            }
-        }
+        countTrucks = (int) ((double) (countContainers) / (double) (MAX_COUNT_CONTAINERS));
     }
 
     public void printListParcel() {
@@ -66,7 +56,7 @@ public class Parcel {
 
     }
 
-    public void setCountBoxes(int count) {
+    private void setCountBoxes(int count) {
         countBoxes = count;
     }
 }

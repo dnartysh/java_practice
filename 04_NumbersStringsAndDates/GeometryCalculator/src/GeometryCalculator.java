@@ -6,7 +6,7 @@ public class GeometryCalculator {
 
     // метод должен использовать абсолютное значение radius
     public static double getSphereVolume(double radius) {
-        return  4 * Math.PI * Math.pow(radius, 2.0);
+        return  (double) 4 / 3 * Math.PI * Math.pow(radius, 2.0);
     }
 
     public static boolean isTriangleRightAngled(double a, double b, double c) {
