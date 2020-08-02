@@ -133,12 +133,12 @@ public class Loader {
         return checkAndEditTelephoneNumber(refactoredNumber);
     }
 
-    private static String checkAndEditTelephoneNumber(String number) {
+        private static String checkAndEditTelephoneNumber(String number) {
         if (number.length() == 11) {
             if (number.indexOf("7") == 0) {
                 return number;
             } else if (number.indexOf("8") == 0) {
-                return number.replaceAll(String.valueOf(number.indexOf("8")), "7");
+                return number.replaceAll(number.substring(0, 1), "7");
             } else {
                 return "Неправильно введен номер телефона!";
             }
