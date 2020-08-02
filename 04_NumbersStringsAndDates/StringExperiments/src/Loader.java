@@ -26,15 +26,15 @@ public class Loader {
 //        System.out.println("Пожалуйста, введите ваши Фамилию, Имя и Отчество. Для разделения используйте пробел: ");
 //        printFioWithRegular(scanner.nextLine());
 
-//        System.out.println(refactoringTelephoneNumber("+7 909 123-45-67"));
-//        System.out.println(refactoringTelephoneNumber("+7 (909) 1234567"));
-//        System.out.println(refactoringTelephoneNumber("8-905-1234567"));
-//        System.out.println(refactoringTelephoneNumber("9-453-1234567"));
-//        System.out.println(refactoringTelephoneNumber("8-905-123"));
-//        System.out.println(refactoringTelephoneNumber("905-1234567"));
-//        System.out.println(refactoringTelephoneNumber("8-905-12345672342"));
-        System.out.println("Введите номер кредитной карты: ");
-        System.out.println(searchAndReplaceDiamondsWithRegular(scanner.nextLine(), "****"));
+        System.out.println(refactoringTelephoneNumber("+7 909 123-45-67"));
+        System.out.println(refactoringTelephoneNumber("+7 (909) 1234567"));
+        System.out.println(refactoringTelephoneNumber("8-905-1234567"));
+        System.out.println(refactoringTelephoneNumber("9-453-1234567"));
+        System.out.println(refactoringTelephoneNumber("8-905-123"));
+        System.out.println(refactoringTelephoneNumber("905-1234567"));
+        System.out.println(refactoringTelephoneNumber("8-905-12345672342"));
+//        System.out.println("Введите номер кредитной карты: ");
+//        System.out.println(searchAndReplaceDiamondsWithRegular(scanner.nextLine(), "****"));
     }
 
     private static String searchAndReplaceDiamonds(String text, String placeholder) {
@@ -138,7 +138,7 @@ public class Loader {
             if (number.indexOf("7") == 0) {
                 return number;
             } else if (number.indexOf("8") == 0) {
-                return number.replaceAll(String.valueOf(number.indexOf(0)), "7");
+                return number.replaceAll(String.valueOf(number.indexOf("8")), "7");
             } else {
                 return "Неправильно введен номер телефона!";
             }
