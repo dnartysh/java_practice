@@ -21,7 +21,7 @@ public class Loader {
 
 		int countBirthday = 0;
 
-		while (calendarBirthday.get(Calendar.YEAR) < calendar.get(Calendar.YEAR)) {
+		while (calendarBirthday.before(calendar)) {
 			System.out.println(countBirthday++ + " - " + dateFormat.format(calendarBirthday.getTime()));
 
 			calendarBirthday.add(Calendar.YEAR, 1);
