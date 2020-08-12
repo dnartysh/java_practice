@@ -3,8 +3,7 @@ import java.util.Scanner;
 
 public class Loader {
 
-	private static int numberItem = -1;
-	private static String textItem = "";
+	public final static int MAX_VALUE_NUMBER_IN_CHAR = '9';
 
 	public static void main(String[] args) {
 		ArrayList<String> taskList = new ArrayList<>();
@@ -13,29 +12,27 @@ public class Loader {
 		System.out.println("Примеры запросов: LIST, ADD Дело1, ADD 1 Дело2, EDIT 4 Дело ред., DELETE 1");
 
 		while (true) {
-			clearVariable();
-
 			System.out.print("Пожалуйста, введите запрос: ");
 			String enterValue = scanner.nextLine();
 
-			if (checkNameMethod(enterValue).equals("LIST")) {
+			if (getCommandName(enterValue).equals("LIST")) {
 				takeItemList(taskList);
-			} else if (checkNameMethod(enterValue).equals("ADD")) {
-				setParseText(enterValue);
-				addItemList(taskList, enterValue);
-			} else if (checkNameMethod(enterValue).equals("EDIT")) {
-				setParseText(enterValue);
-				editItemList(taskList);
-			} else if (checkNameMethod(enterValue).equals("DELETE")) {
-				setParseText(enterValue);
-				deleteItemList(taskList);
+			} else if (getCommandName(enterValue).equals("ADD")) {
+				Item item = setParsedText(enterValue);
+				addItemList(taskList, item);
+			} else if (getCommandName(enterValue).equals("EDIT")) {
+				Item item = setParsedText(enterValue);
+				editItemList(taskList, item);
+			} else if (getCommandName(enterValue).equals("DELETE")) {
+				Item item = setParsedText(enterValue);
+				deleteItemList(taskList, item);
 			} else {
 				System.out.println("Неправильно введен запрос. Введите запрос правильно.");
 			}
 		}
 	}
 
-	private static String checkNameMethod(String enterValue) {
+	private static String getCommandName(String enterValue) {
 		String[] arrayEnterValue = enterValue.split("\\s+");
 
 		return arrayEnterValue[0];
@@ -51,68 +48,78 @@ public class Loader {
 		}
 	}
 
-	private static void addItemList(ArrayList<String> taskList, String enterValue) {
-		if (numberItem >= 0) {
-			if (isCorrectInputNumber(taskList)) {
-				taskList.add(numberItem, textItem);
+	private static void addItemList(ArrayList<String> taskList, Item item) {
+		if (item.numberItem >= 0) {
+			if (isCorrectInputNumber(taskList, item)) {
+				taskList.add(item.numberItem, item.textItem);
 				System.out.println("Запись успешно добавлена!");
 			} else {
 				System.out.println("Введен некорректный номер записи!");
 			}
 		} else {
-			taskList.add(textItem);
+			taskList.add(item.textItem);
 			System.out.println("Запись успешно добавлена!");
 		}
 	}
 
-	private static void editItemList(ArrayList<String> taskList) {
-		if (isCorrectInputNumber(taskList)) {
-			taskList.set(numberItem, textItem);
+	private static void editItemList(ArrayList<String> taskList, Item item) {
+		if (isCorrectInputNumber(taskList, item)) {
+			taskList.set(item.numberItem, item.textItem);
 			System.out.println("Запись успешно изменена!");
 		} else {
 			System.out.println("Введен некорректный номер записи!");
 		}
 	}
 
-	private static void deleteItemList(ArrayList<String> taskList) {
-		if (isCorrectInputNumber(taskList)) {
-			taskList.remove(numberItem);
+	private static void deleteItemList(ArrayList<String> taskList, Item item) {
+		if (isCorrectInputNumber(taskList, item)) {
+			taskList.remove(item.numberItem);
 			System.out.println("Запись успешно удалена!");
+		} else {
+			System.out.println("Введен некорректный номер записи!");
 		}
 	}
 
-	private static void setParseText(String parseText) {
+	private static Item setParsedText(String parseText) {
+		Item item = new Item();
+
 		String[] arrayParseText = parseText.split("\\s+");
 
-		if (isNumeric(arrayParseText[1])) {
-			numberItem = Integer.parseInt(arrayParseText[1]);
+		if (isNumericWithMatches(arrayParseText[1])) {
+			item.numberItem = Integer.parseInt(arrayParseText[1]);
 
 			for (int i = 2; i < arrayParseText.length; i++) {
-				textItem += " " + arrayParseText[i];
+				item.textItem += " " + arrayParseText[i];
 			}
 		} else {
 			for (int i = 1; i < arrayParseText.length; i++) {
-				textItem += " " + arrayParseText[i];
+				item.textItem += " " + arrayParseText[i];
 			}
 		}
-		textItem = textItem.trim();
+		item.textItem = item.textItem.trim();
+
+		return item;
 	}
 
-	private static boolean isCorrectInputNumber(ArrayList<String> taskList) {
-		return taskList.size() >= numberItem;
+	private static boolean isCorrectInputNumber(ArrayList<String> taskList, Item item) {
+		return taskList.size() >= item.numberItem;
+	}
+
+	private static boolean isNumericWithMatches(String numericText) {
+		return numericText.matches("\\d+");
 	}
 
 	private static boolean isNumeric(String numericText) {
 		for (int i = 0; i < numericText.length(); i++) {
-			if (!(numericText.charAt(i) <= 57)) {
+			if (!(numericText.charAt(i) <= MAX_VALUE_NUMBER_IN_CHAR)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private static void clearVariable() {
-		numberItem = -1;
-		textItem = "";
+	static class Item {
+		int numberItem = -1;
+		String textItem = "";
 	}
 }
