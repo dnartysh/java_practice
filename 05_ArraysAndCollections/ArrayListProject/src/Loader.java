@@ -4,51 +4,49 @@ import java.util.Scanner;
 public class Loader {
 
 	private static ArrayList<String> taskList = new ArrayList<>();
-	private static String[] arrayEnterValue = new String[0];
 
 	public static void main(String[] args) {
-
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Примеры запросов: LIST, ADD Дело1, ADD 1 Дело2, EDIT 4 Дело ред., DELETE 1");
+		System.out.println(
+				"Примеры запросов: LIST, ADD Дело1, ADD 1 Дело2, EDIT 4 Дело ред., DELETE 1");
 
 		while (true) {
 			System.out.print("Пожалуйста, введите запрос: ");
-			setArrayEnterValue(scanner.nextLine());
+			String[] arrayEnterValue = setArrayEnterValue(scanner.nextLine());
 
-			if (isCorrectInput()) {
-				Item item = setItem();
+			Item item = setItem(arrayEnterValue);
 
-				switch (getCommandName()) {
-					case "LIST":
-						printItemList();
-						break;
-					case "ADD":
-						addItemList(item);
-						break;
-					case "EDIT":
-						editItemList(item);
-						break;
-					case "DELETE":
-						deleteItemList(item);
-						break;
-					default:
-						System.out.println("Неправильно введен запрос. Введите запрос правильно.");
-						break;
-				}
-			} else {
-				System.out.println("Неправильно введен запрос. Введите запрос правильно.");
+			switch (getCommandName(arrayEnterValue)) {
+				case "LIST":
+					printItemList();
+					break;
+				case "ADD":
+					addItemList(arrayEnterValue, item);
+					break;
+				case "EDIT":
+					editItemList(arrayEnterValue, item);
+					break;
+				case "DELETE":
+					deleteItemList(arrayEnterValue, item);
+					break;
+				default:
+					System.out.println("Неправильно введен запрос. Введите запрос правильно.");
+					break;
 			}
 		}
 	}
 
-	private static void setArrayEnterValue(String inputText) {
-		arrayEnterValue = inputText.split("\\s+");
+	private static String[] setArrayEnterValue(String inputText) {
+		String[] arrayEnterValue = inputText.split("\\s+");
+
+		return arrayEnterValue;
 	}
 
-	private static boolean isCorrectInput() {
+	private static boolean isCorrectInput(String[] arrayEnterValue) {
 		String item = arrayEnterValue[0];
 
-		if (item.equals("ADD") || item.equals("LIST") || item.equals("EDIT") || item.equals("DELETE")) {
+		if (item.equals("ADD") || item.equals("LIST") || item.equals("EDIT") || item
+				.equals("DELETE")) {
 			if (!item.equals("LIST") && arrayEnterValue.length <= 1) {
 				return false;
 			}
@@ -58,7 +56,7 @@ public class Loader {
 		}
 	}
 
-	private static String getCommandName() {
+	private static String getCommandName(String[] arrayEnterValue) {
 		return arrayEnterValue[0];
 	}
 
@@ -73,47 +71,66 @@ public class Loader {
 		}
 	}
 
-	private static void addItemList(Item item) {
-		if (item.numberItem >= 0 && !"".equals(item.textItem) && isCorrectInputNumber(item)) {
-			taskList.add(item.numberItem, item.textItem);
-			System.out.println("Запись успешно добавлена!");
-		} else if ("".equals(item.textItem)){
-			System.out.println("Не задан текст!");
-		} else if (!isCorrectInputNumber(item)) {
-			System.out.println("Введенный индекс превышает размер списка! Последний индекс записи - " + getNumberLastRecord());
-		} else {
-			taskList.add(item.textItem);
-			System.out.println("Запись успешно добавлена!");
-		}
-	}
-
-	private static void editItemList(Item item) {
-		if (item.numberItem >= 0 && !"".equals(item.textItem) && isCorrectInputNumber(item)) {
-			taskList.set(item.numberItem, item.textItem);
-			System.out.println("Запись успешно изменена!");
-		} else if (item.numberItem == -1) {
-			System.out.println("Не задан индекс!");
-		} else if (!isCorrectInputNumber(item)){
-			System.out.println("Введенный индекс превышает размер списка! Последний индекс записи - " + getNumberLastRecord());
-		} else {
-			System.out.println("Не задан текст!");
-		}
-	}
-
-	private static void deleteItemList(Item item) {
-		if (isNumericWithMatches(String.valueOf(item.numberItem))) {
-			if (isCorrectInputNumber(item)) {
-				taskList.remove(item.numberItem);
-				System.out.println("Запись успешно удалена!");
+	private static void addItemList(String[] arrayEnterValue, Item item) {
+		if (isCorrectInput(arrayEnterValue)) {
+			if (item.numberItem >= 0 && !"".equals(item.textItem) && isCorrectInputNumber(item)) {
+				taskList.add(item.numberItem, item.textItem);
+				System.out.println("Запись успешно добавлена!");
+			} else if ("".equals(item.textItem)) {
+				System.out.println("Не задан текст!");
+			} else if (!isCorrectInputNumber(item)) {
+				System.out.println(
+						"Введенный индекс превышает размер списка! Последний индекс записи - "
+								+ getNumberLastRecord());
 			} else {
-				System.out.println("Введенный индекс превышает размер списка! Последний индекс записи - " + getNumberLastRecord());
+				taskList.add(item.textItem);
+				System.out.println("Запись успешно добавлена!");
 			}
 		} else {
-			System.out.println("Введен некорректный номер записи! Последний индекс записи - " + getNumberLastRecord());
+			System.out.println("Неправильно введен запрос. Введите запрос правильно.");
 		}
 	}
 
-	private static Item setItem() {
+	private static void editItemList(String[] arrayEnterValue, Item item) {
+		if (isCorrectInput(arrayEnterValue)) {
+			if (item.numberItem >= 0 && !"".equals(item.textItem) && isCorrectInputNumber(item)) {
+				taskList.set(item.numberItem, item.textItem);
+				System.out.println("Запись успешно изменена!");
+			} else if (item.numberItem == -1) {
+				System.out.println("Не задан индекс!");
+			} else if (!isCorrectInputNumber(item)) {
+				System.out.println(
+						"Введенный индекс превышает размер списка! Последний индекс записи - "
+								+ getNumberLastRecord());
+			} else {
+				System.out.println("Не задан текст!");
+			}
+		} else {
+			System.out.println("Неправильно введен запрос. Введите запрос правильно.");
+		}
+	}
+
+	private static void deleteItemList(String[] arrayEnterValue, Item item) {
+		if (isCorrectInput(arrayEnterValue)) {
+			if (item.numberItem != -1) {
+				if (isCorrectInputNumber(item)) {
+					taskList.remove(item.numberItem);
+					System.out.println("Запись успешно удалена!");
+				} else {
+					System.out.println(
+							"Введенный индекс превышает размер списка! Последний индекс записи - "
+									+ getNumberLastRecord());
+				}
+			} else {
+				System.out.println("Введен некорректный номер записи! Последний индекс записи - "
+						+ getNumberLastRecord());
+			}
+		} else {
+			System.out.println("Неправильно введен запрос. Введите запрос правильно.");
+		}
+	}
+
+	private static Item setItem(String[] arrayEnterValue) {
 		if (arrayEnterValue.length > 1) {
 			Item item = new Item();
 
@@ -137,7 +154,7 @@ public class Loader {
 	}
 
 	private static boolean isCorrectInputNumber(Item item) {
-		return taskList.size() >= item.numberItem;
+		return taskList.size() > item.numberItem;
 	}
 
 	private static boolean isNumericWithMatches(String numericText) {
