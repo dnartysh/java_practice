@@ -1,80 +1,58 @@
 import java.util.Scanner;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Loader {
 
-    public static void main(String[] args) {
-        TreeSet<String> listEmails = new TreeSet<>();
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Пример запроса: ADD user@domen.com, ADD user@host.domen.net, LIST");
+	private static TreeSet<String> listEmails = new TreeSet<>();
 
-        while (true) {
-            System.out.println("Введите запрос: ");
-            String input = scanner.nextLine();
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Пример запроса: ADD user@domen.com, ADD user@host.domen.net, LIST");
 
-            if (getInputMethod(input).equals("ADD")) {
-                Email email = setParsedText(input);
-                if (email != null) {
-                    addListEmail(listEmails, email);
-                } else {
-                    System.out.println("Некорректно введен email. Введите email правильно.");
+		// ^(.{3,4})(.+@.+)$
+		while (true) {
+			Matcher input = Pattern.compile("^(.{3,4})(.+@.+)?$").matcher(scanner.nextLine());
+
+			if (input.find()) {
+                switch (input.group(1).trim()) {
+                    case "LIST":
+                        printListEmails();
+                        break;
+                    case "ADD":
+                        if (input.group(2) != null) {
+                            addListEmail(input.group(2));
+                        } else {
+                            System.out.println("Неправильно введен e-mail. Введите правильный e-mail");
+                        }
+                        break;
+                    default:
+                        System.out.println("Введенная команда неопознана. Используйте ADD или LIST.");
+                        break;
                 }
-            } else if (getInputMethod(input).equals("LIST")) {
-                    printListEmail(listEmails);
             } else {
-                System.out.println("Некорректно введен запрос. Введите запрос корректно.");
+                System.out.println("Неправильно введен e-mail. Введите правильный e-mail");
             }
-        }
-    }
+		}
+	}
 
-    private static void printListEmail(TreeSet<String> listEmails) {
-        if (getSizeList(listEmails) != 0) {
-            for (String Item : listEmails) {
-                System.out.println(Item);
-            }
-        } else {
-            System.out.println("Список адресов пуст!");
-        }
+	private static void printListEmails() {
+		if (getSizeList(listEmails) != 0) {
+			for (String Item : listEmails) {
+				System.out.println(Item);
+			}
+		} else {
+			System.out.println("Список адресов пуст!");
+		}
+	}
 
-    }
+	private static void addListEmail(String addressEmail) {
+		listEmails.add(addressEmail);
+		System.out.println("Адрес успешно добавлен!");
+	}
 
-    private static void addListEmail(TreeSet<String> listEmails, Email email) {
-        listEmails.add(email.addressEmail);
-        System.out.println("Адрес успешно добавлен!");
-    }
-
-    private static Email setParsedText(String input) {
-        Email email = new Email();
-
-        if (isCorrectEmail(input)) {
-            email.addressEmail = getEmailAddress(input);
-            return email;
-        } else {
-            return null;
-        }
-    }
-
-    private static String getInputMethod(String input) {
-        String[] arrayInput = input.split("\\s+");
-
-        return arrayInput[0];
-    }
-
-    private static boolean isCorrectEmail(String addressEmail) {
-        return addressEmail.matches("(.*)@(.*)[.](.*)");
-    }
-
-    private static String getEmailAddress(String input) {
-        String[] arrayInput = input.split("\\s+");
-
-        return arrayInput[1];
-    }
-
-    static class Email {
-        String addressEmail = "";
-    }
-
-    private static int getSizeList(TreeSet<String> listEmail) {
-        return listEmail.size();
-    }
+	private static int getSizeList(TreeSet<String> listEmail) {
+		return listEmail.size();
+	}
 }
