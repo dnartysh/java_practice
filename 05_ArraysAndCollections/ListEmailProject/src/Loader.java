@@ -11,34 +11,34 @@ public class Loader {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Пример запроса: ADD user@domen.com, ADD user@host.domen.net, LIST");
 
-		// ^(.{3,4})(.+@.+)$
 		while (true) {
-			Matcher input = Pattern.compile("^(.{3,4})(.+@.+)?$").matcher(scanner.nextLine());
+			Matcher input = Pattern.compile("^(?<cmd>ADD|LIST)\\s*(?<addressEmail>.+@.+\\..+)?$").matcher(scanner.nextLine());
 
 			if (input.find()) {
-                switch (input.group(1).trim()) {
-                    case "LIST":
-                        printListEmails();
-                        break;
-                    case "ADD":
-                        if (input.group(2) != null) {
-                            addListEmail(input.group(2));
-                        } else {
-                            System.out.println("Неправильно введен e-mail. Введите правильный e-mail");
-                        }
-                        break;
-                    default:
-                        System.out.println("Введенная команда неопознана. Используйте ADD или LIST.");
-                        break;
-                }
-            } else {
-                System.out.println("Неправильно введен e-mail. Введите правильный e-mail");
-            }
+				switch (input.group("cmd")) {
+					case "ADD":
+						if (isInputAddressEmail(input.group("addressEmail"))) {
+							addListEmail(input.group("addressEmail"));
+						} else {
+							System.out.println("Запрос введен неправильно. Введите правильный запрос.");
+						}
+						break;
+					case "LIST":
+						if (!isInputAddressEmail(input.group("addressEmail"))) {
+							printListEmails();
+						} else {
+							System.out.println("Запрос введен неправильно. Введите правильный запрос.");
+						}
+						break;
+				}
+			} else {
+				System.out.println("Запрос введен неправильно. Введите правильный запрос.");
+			}
 		}
 	}
 
 	private static void printListEmails() {
-		if (getSizeList(listEmails) != 0) {
+		if (getSizeList() != 0) {
 			for (String Item : listEmails) {
 				System.out.println(Item);
 			}
@@ -52,7 +52,11 @@ public class Loader {
 		System.out.println("Адрес успешно добавлен!");
 	}
 
-	private static int getSizeList(TreeSet<String> listEmail) {
-		return listEmail.size();
+	private static int getSizeList() {
+		return listEmails.size();
+	}
+
+	private static boolean isInputAddressEmail(String inputText) {
+		return inputText != null;
 	}
 }
