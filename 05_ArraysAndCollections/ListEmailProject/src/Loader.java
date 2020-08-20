@@ -17,14 +17,15 @@ public class Loader {
 			if (input.find()) {
 				switch (input.group("cmd")) {
 					case "ADD":
-						if (isInputAddressEmail(input.group("addressEmail"))) {
-							addListEmail(input.group("addressEmail"));
+						if (input.group("addressEmail") != null) {
+							listEmails.add(input.group("addressEmail"));
+							System.out.println("E-mail успешно добавлен!");
 						} else {
 							System.out.println("Запрос введен неправильно. Введите правильный запрос.");
 						}
 						break;
 					case "LIST":
-						if (!isInputAddressEmail(input.group("addressEmail"))) {
+						if (input.group("addressEmail") == null) {
 							printListEmails();
 						} else {
 							System.out.println("Запрос введен неправильно. Введите правильный запрос.");
@@ -38,25 +39,12 @@ public class Loader {
 	}
 
 	private static void printListEmails() {
-		if (getSizeList() != 0) {
+		if (listEmails.size() != 0) {
 			for (String Item : listEmails) {
 				System.out.println(Item);
 			}
 		} else {
 			System.out.println("Список адресов пуст!");
 		}
-	}
-
-	private static void addListEmail(String addressEmail) {
-		listEmails.add(addressEmail);
-		System.out.println("Адрес успешно добавлен!");
-	}
-
-	private static int getSizeList() {
-		return listEmails.size();
-	}
-
-	private static boolean isInputAddressEmail(String inputText) {
-		return inputText != null;
 	}
 }
