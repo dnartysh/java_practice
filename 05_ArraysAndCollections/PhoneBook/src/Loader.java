@@ -16,13 +16,17 @@ public class Loader {
 		while (true) {
 			String input = getInputConsole();
 
-			Item item = createItem();
-			item = setItem(input, item);
-
-			if (!"".equals(item.firstname) || !"".equals(item.phoneNumber)) {
-				getItemFromPhoneBook(item);
+			if (input.equals("LIST")) {
+				printPhoneBook();
 			} else {
-				System.out.println("Запрос введен некорректно! Введите запрос заново!");
+				Item item = createItem();
+				item = setItem(input, item);
+
+				if (!"".equals(item.firstname) || !"".equals(item.phoneNumber)) {
+					getItemFromPhoneBook(item);
+				} else {
+					System.out.println("Запрос введен некорректно! Введите запрос заново!");
+				}
 			}
 		}
 	}
@@ -42,6 +46,16 @@ public class Loader {
 	private static class Item {
 		String phoneNumber = "";
 		String firstname = "";
+	}
+
+	private static void printPhoneBook() {
+		if (phoneBook.size() != 0) {
+			for (Map.Entry<String, String> record: phoneBook.entrySet()) {
+				System.out.println("Имя: " + record.getValue() + " -> номер: " + record.getKey());
+			}
+		} else {
+			System.out.println("Список абонентов пуст!");
+		}
 	}
 
 	private static Item setItem(String inputValue, Item item) {
