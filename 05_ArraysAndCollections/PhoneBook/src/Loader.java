@@ -11,19 +11,19 @@ public class Loader {
 	static TreeMap<String, String> phoneBook = new TreeMap<>();
 
 	public static void main(String[] args) {
-		System.out.println("Введите имя или номер абонента. Например: Антон или 79535673785");
+		System.out.println("Введите имя или номер абонента. Например: Антон или 79535673785. Для вывода списка используйте LIST");
 
 		while (true) {
-			String input = getInputConsole();
+			String input = readFromConsole();
 
 			if (input.equals("LIST")) {
 				printPhoneBook();
 			} else {
-				Item item = createItem();
-				item = setItem(input, item);
+				NameOrPhone nameOrPhone = new NameOrPhone();
+				nameOrPhone = setItem(input, nameOrPhone);
 
-				if (!"".equals(item.firstname) || !"".equals(item.phoneNumber)) {
-					getItemFromPhoneBook(item);
+				if (!"".equals(nameOrPhone.firstname) || !"".equals(nameOrPhone.phoneNumber)) {
+					printExistingOrAddNewItem(nameOrPhone);
 				} else {
 					System.out.println("Запрос введен некорректно! Введите запрос заново!");
 				}
@@ -31,19 +31,13 @@ public class Loader {
 		}
 	}
 
-	private static String getInputConsole() {
+	private static String readFromConsole() {
 		Scanner scanner = new Scanner(System.in);
 
 		return scanner.nextLine();
 	}
 
-	private static Item createItem() {
-		Item item = new Item();
-
-		return item;
-	}
-
-	private static class Item {
+	private static class NameOrPhone {
 		String phoneNumber = "";
 		String firstname = "";
 	}
@@ -58,50 +52,50 @@ public class Loader {
 		}
 	}
 
-	private static Item setItem(String inputValue, Item item) {
+	private static NameOrPhone setItem(String inputValue, NameOrPhone nameOrPhone) {
 		Matcher inputM = Pattern.compile("^(?<firstname>[а-яА-Яa-zA-Z]+)$|^(?<phone>[0-9]+)$")
 				.matcher(inputValue);
 
 		if (inputM.find()) {
 			if (inputM.group("firstname") != null) {
-				item.firstname = inputM.group("firstname");
+				nameOrPhone.firstname = inputM.group("firstname");
 			} else if (inputM.group("phone") != null) {
 				if (isCorrectInputNumber(inputM.group("phone"))) {
-					item.phoneNumber = inputM.group("phone");
+					nameOrPhone.phoneNumber = inputM.group("phone");
 				}
 			}
 		}
 
-		return item;
+		return nameOrPhone;
 	}
 
-	private static void getItemFromPhoneBook(Item item) {
-		if (phoneBook.containsValue(item.firstname)) {
-			System.out.println("Введенное имя -> " + item.firstname + ". Найден телефон -> " + getFirstnameFromPhoneBook(
-					item.firstname));
-		} else if (phoneBook.containsKey(item.phoneNumber)) {
-			System.out.println("Введенный телефон -> " + item.phoneNumber + ". Найдено имя -> "
-					+ getTelephoneFromPhoneBook(item.phoneNumber));
+	private static void printExistingOrAddNewItem(NameOrPhone nameOrPhone) {
+		if (phoneBook.containsValue(nameOrPhone.firstname)) {
+			System.out.println("Введенное имя -> " + nameOrPhone.firstname + ". Найден телефон -> " + getFirstnameFromPhoneBook(
+					nameOrPhone.firstname));
+		} else if (phoneBook.containsKey(nameOrPhone.phoneNumber)) {
+			System.out.println("Введенный телефон -> " + nameOrPhone.phoneNumber + ". Найдено имя -> "
+					+ getTelephoneFromPhoneBook(nameOrPhone.phoneNumber));
 		} else {
-			addItemInPhoneBook(item);
+			addItemInPhoneBook(nameOrPhone);
 		}
 	}
 
-	private static void addItemInPhoneBook(Item item) {
-		if ("".equals(item.firstname)) {
+	private static void addItemInPhoneBook(NameOrPhone nameOrPhone) {
+		if ("".equals(nameOrPhone.firstname)) {
 			System.out.println("Введенный телефон не обнаружен в телефонной книге. Введите имя:");
-		} else if ("".equals(item.phoneNumber)) {
+		} else if ("".equals(nameOrPhone.phoneNumber)) {
 			System.out.println("Введенное имя не найдено в телефонной книге. Введите номер телефона:");
 		}
 
-		while ("".equals(item.firstname) || "".equals(item.phoneNumber)) {
-			String input = getInputConsole();
-			item = setItem(input, item);
+		while ("".equals(nameOrPhone.firstname) || "".equals(nameOrPhone.phoneNumber)) {
+			String input = readFromConsole();
+			nameOrPhone = setItem(input, nameOrPhone);
 
-			if (!"".equals(item.firstname) && !"".equals(item.phoneNumber)) {
-				phoneBook.put(item.phoneNumber, item.firstname);
+			if (!"".equals(nameOrPhone.firstname) && !"".equals(nameOrPhone.phoneNumber)) {
+				phoneBook.put(nameOrPhone.phoneNumber, nameOrPhone.firstname);
 				System.out.println("Запись успешно добавлена!");
-			} else if ("".equals(item.firstname)) {
+			} else if ("".equals(nameOrPhone.firstname)) {
 				System.out.println("Имя введено некорректно! Введите заново!");
 			} else {
 				System.out.println("Телефон введен некорректно! Введите заново!");
@@ -115,17 +109,12 @@ public class Loader {
 				return map.getKey();
 			}
 		}
+
 		return "";
 	}
 
 	private static String getTelephoneFromPhoneBook(String inputTelephone) {
-		for (Map.Entry<String, String> map : phoneBook.entrySet()) {
-			if (map.getKey().equals(inputTelephone)) {
-				return map.getValue();
-			}
-		}
-
-		return "";
+		return phoneBook.get(inputTelephone);
 	}
 
 	private static boolean isCorrectInputNumber(String inputNumber) {
