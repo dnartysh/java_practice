@@ -22,62 +22,49 @@ public class Loader {
 		while (true) {
 			System.out.println("Пожалуйста, введите номер автомобиля: ");
 			String input = scanner.nextLine();
-			printFor(input);
-			printBinarySearch(input);
-			printTreeSet(input);
-			printHashSet(input);
+			printForBinaryHashTreeSearch(input);
 		}
 	}
 
-	private static void printFor(String input) {
-		String text = "Поиск перебором: Номер - " + input + " не найден! Время поиска";
-		long start = System.nanoTime();
+	private static void printForBinaryHashTreeSearch(String input) {
+		long start = 0;
+		long delayFor = 0;
+		long delayBinary = 0;
+		long delayHash = 0;
+		long delayTree = 0;
 
+		start = System.nanoTime();
 		for (String value : arrayList) {
 			if (input.equals(value)) {
-				long delay = System.nanoTime() - start;
-				text = "Поиск перебором: Номер - " + input + " найден! Время поиска - " + delay + " нс";
+				delayFor = System.nanoTime() - start;
 				break;
 			}
 		}
 
-		System.out.println(text);
-	}
-
-	private static void printBinarySearch(String input) {
-		String text = "Бинарный поиск: Номер - " + input + " не найден! Время поиска";
-		long start = System.nanoTime();
-
+		start = System.nanoTime();
 		if (Collections.binarySearch(arrayList, input) >= 0) {
-			long delay = System.nanoTime() - start;
-			text = "Бинарный поиск: Номер - " + input + " найден! Время поиска - " + delay + " нс";
+			delayBinary = System.nanoTime() - start;
 		}
 
-		System.out.println(text);
-	}
-
-	private static void printHashSet(String input) {
-		String text = "Поиск в HashSet: Номер - " + input + " не найден!";
-		long start = System.nanoTime();
-
+		start = System.nanoTime();
 		if (hashSet.contains(input)) {
-			long delay = System.nanoTime() - start;
-			text = "Поиск в HashSet: Номер - " + input + " найден! Время поиска - " + delay + " нс";
+			delayHash = System.nanoTime() - start;
 		}
 
-		System.out.println(text);
+		start = System.nanoTime();
+		if (treeSet.contains(input)) {
+			delayTree = System.nanoTime() - start;
+		}
+
+		printDelays(input, delayFor, delayBinary, delayHash, delayTree);
 	}
 
-	private static void printTreeSet(String input) {
-		String text = "Поиск в TreeSet: Номер - " + input + " не найден!";
-		long start = System.nanoTime();
-
-		if (treeSet.contains(input)) {
-			long delay = System.nanoTime() - start;
-			text = "Поиск в TreeSet: Номер - " + input + " найден! Время поиска - " + delay + " нс";
-		}
-
-		System.out.println(text);
+	private static void printDelays(String input, long delayFor, long delayBinary, long delayHash, long delayTree) {
+		System.out.println("Время поиска номера - " + input + ":\n"
+				+ "Перебором - " + delayFor + " нс\n"
+				+ "Бинарным поиском - " + delayBinary + " нс\n"
+				+ "Hash - " + delayHash + " нс\n"
+				+ "Tree - " + delayTree + " нс\n");
 	}
 
 	private static int setArraysAndGetSize() {
