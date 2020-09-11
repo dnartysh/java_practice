@@ -28,43 +28,33 @@ public class Loader {
 
 	private static void printForBinaryHashTreeSearch(String input) {
 		long start = 0;
-		long delayFor = 0;
-		long delayBinary = 0;
-		long delayHash = 0;
-		long delayTree = 0;
 
 		start = System.nanoTime();
 		for (String value : arrayList) {
 			if (input.equals(value)) {
-				delayFor = System.nanoTime() - start;
+				printResults("Поиск перебором: ", input, System.nanoTime() - start);
 				break;
 			}
 		}
 
 		start = System.nanoTime();
 		if (Collections.binarySearch(arrayList, input) >= 0) {
-			delayBinary = System.nanoTime() - start;
+			printResults("binarySearch: ", input, System.nanoTime() - start);
 		}
 
 		start = System.nanoTime();
 		if (hashSet.contains(input)) {
-			delayHash = System.nanoTime() - start;
+			printResults("hashSet: ", input, System.nanoTime() - start);
 		}
 
 		start = System.nanoTime();
 		if (treeSet.contains(input)) {
-			delayTree = System.nanoTime() - start;
+			printResults("treeSet: ", input, System.nanoTime() - start);
 		}
-
-		printDelays(input, delayFor, delayBinary, delayHash, delayTree);
 	}
 
-	private static void printDelays(String input, long delayFor, long delayBinary, long delayHash, long delayTree) {
-		System.out.println("Время поиска номера - " + input + ":\n"
-				+ "Перебором - " + delayFor + " нс\n"
-				+ "Бинарным поиском - " + delayBinary + " нс\n"
-				+ "Hash - " + delayHash + " нс\n"
-				+ "Tree - " + delayTree + " нс\n");
+	private static void printResults(String message, String input, long delay) {
+		System.out.println(message + " поиск по номеру " + input + " занял " + delay + " нс");
 	}
 
 	private static int setArraysAndGetSize() {
