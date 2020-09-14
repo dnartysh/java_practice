@@ -1,5 +1,7 @@
+package Accounts;
+
 public class BankAccount {
-    public double sum;
+    private double sum;
 
     public BankAccount(double sum) {
         setSum(sum);
@@ -9,11 +11,12 @@ public class BankAccount {
         return sum;
     }
 
-    public void setSum(double sum) {
+    private void setSum(double sum) {
         this.sum = sum;
     }
 
     public void addSum(double sum) {
+
         this.sum += sum;
     }
 

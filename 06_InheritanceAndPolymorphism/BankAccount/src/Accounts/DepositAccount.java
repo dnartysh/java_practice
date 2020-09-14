@@ -1,9 +1,11 @@
+package Accounts;
+
 import java.time.LocalDate;
 
 public class DepositAccount extends BankAccount {
 
-    LocalDate currentDate = LocalDate.now();
-    LocalDate datePayment;
+    private final LocalDate currentDate = LocalDate.now();
+    private LocalDate datePayment;
 
     public DepositAccount(double sum) {
         super(sum);

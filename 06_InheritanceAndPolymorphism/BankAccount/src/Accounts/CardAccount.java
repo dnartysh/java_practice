@@ -1,6 +1,8 @@
+package Accounts;
+
 public class CardAccount extends BankAccount {
 
-    public static final double PERCENT_COMMISSION = 1.01; // 1%
+    private static final double PERCENT_COMMISSION = 1.01; // 1%
 
     public CardAccount(double sum) {
         super(sum);
