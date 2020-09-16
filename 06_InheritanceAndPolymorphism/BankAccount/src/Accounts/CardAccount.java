@@ -8,7 +8,13 @@ public class CardAccount extends BankAccount {
         super(sum);
     }
 
-    public void subtractSum(double sum) {
-        super.subtractSum(sum * PERCENT_COMMISSION);
+    public boolean subtractSum(double sum) {
+        if (super.getSum() >= sum) {
+            super.subtractSum(sum * PERCENT_COMMISSION);
+            return true;
+        } else {
+            System.out.println("Недостаточно денег на счете!");
+            return false;
+        }
     }
 }

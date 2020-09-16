@@ -17,11 +17,18 @@ public class DepositAccount extends BankAccount {
         datePayment = LocalDate.now();
     }
 
-    public void subtractSum(double sum) {
+    public boolean subtractSum(double sum) {
         if (currentDate.isAfter(datePayment.plusMonths(1))) {
-            super.subtractSum(sum);
+            if (super.getSum() >= sum) {
+                super.subtractSum(sum);
+                return true;
+            } else {
+                System.out.println("Недостаточно денег на счете!");
+                return false;
+            }
         } else {
             System.out.println("Ошибка! Со дня последнего снятия денег еще не прошел 1 месяц");
+            return false;
         }
     }
 }

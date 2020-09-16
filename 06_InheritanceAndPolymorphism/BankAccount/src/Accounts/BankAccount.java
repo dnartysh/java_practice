@@ -16,21 +16,26 @@ public class BankAccount {
     }
 
     public void addSum(double sum) {
-
         this.sum += sum;
     }
 
-    public void subtractSum(double sum) {
-        this.sum -= sum;
+    public boolean subtractSum(double sum) {
+        if (this.sum >= sum) {
+            this.sum -= sum;
+            return true;
+        } else {
+            System.out.println("Недостаточно денег на счете!");
+            return false;
+        }
+
     }
 
     public boolean send(BankAccount receiver, double amount) {
-        double sumBuffer = getSum();
-        double sumReceiverBuffer = receiver.getSum();
-
-        subtractSum(amount);
-        receiver.addSum(amount);
-
-        return sumBuffer != getSum() && sumReceiverBuffer != receiver.getSum();
+        if (subtractSum(amount)) {
+            receiver.addSum(amount);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

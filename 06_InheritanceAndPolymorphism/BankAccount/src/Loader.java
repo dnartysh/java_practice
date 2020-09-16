@@ -19,10 +19,13 @@ public class Loader {
         depositAccount.subtractSum(10);
         System.out.println(depositAccount.getSum());
 
-        if (bankAccount.send(depositAccount, 50)) {
+        if (bankAccount.send(cardAccount, 150)) {
             System.out.println("Деньги успешно переведены!");
         } else {
             System.out.println("Ошибка перевода!");
         }
+
+        System.out.println("bankAccount - " + bankAccount.getSum());
+        System.out.println("cardAccount - " + cardAccount.getSum());
     }
 }
