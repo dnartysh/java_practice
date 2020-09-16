@@ -27,7 +27,6 @@ public class BankAccount {
             System.out.println("Недостаточно денег на счете!");
             return false;
         }
-
     }
 
     public boolean send(BankAccount receiver, double amount) {
