@@ -3,25 +3,30 @@ package Accounts;
 public class BankAccount {
     private double sum;
 
-    public BankAccount(double sum) {
-        setSum(sum);
+    public BankAccount(double amount) {
+        setSum(amount);
     }
 
     public double getSum() {
         return sum;
     }
 
-    private void setSum(double sum) {
-        this.sum = sum;
+    private void setSum(double amount) {
+        sum = amount;
     }
 
-    public void addSum(double sum) {
-        this.sum += sum;
+    public boolean addSum(double amount) {
+        if (amount > 0) {
+            sum += amount;
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public boolean subtractSum(double sum) {
-        if (this.sum >= sum) {
-            this.sum -= sum;
+    public boolean subtractSum(double amount) {
+        if (sum >= amount) {
+            sum -= amount;
             return true;
         } else {
             System.out.println("Недостаточно денег на счете!");

@@ -1,44 +1,64 @@
-import Accounts.BankAccount;
+import Accounts.Account;
 import Accounts.CardAccount;
-import Accounts.DepositAccount;
-import Clients.Client;
 import Clients.IndividualPerson;
-import Clients.LegalPerson;
-import Clients.PhysicalPerson;
 
 public class Loader {
 
     public static void main(String[] args) {
-//        BankAccount bankAccount = new BankAccount(100);
-//        bankAccount.addSum(200);
-//        System.out.println(bankAccount.getSum());
-//        bankAccount.subtractSum(100);
-//        System.out.println(bankAccount.getSum());
+//        Account account = new Account(10000);
+//        System.out.println("Создание счета account...... " + account.getSum());
+//        CardAccount cardAccount = new CardAccount(5000);
+//        System.out.println("Создание счета cardAccount...... " + account.getSum());
 //
-//        CardAccount cardAccount = new CardAccount(100);
-//        cardAccount.subtractSum(50);
-//        System.out.println(cardAccount.getSum());
+//        account.addSum(400);
+//        System.out.println("Внесение наличных account...... " + account.getSum());
 //
-//        DepositAccount depositAccount = new DepositAccount(100);
-//        depositAccount.subtractSum(10);
-//        System.out.println(depositAccount.getSum());
-//
-//        if (bankAccount.send(cardAccount, 150)) {
-//            System.out.println("Деньги успешно переведены!");
-//        } else {
-//            System.out.println("Ошибка перевода!");
-//        }
-//
-//        System.out.println("bankAccount - " + bankAccount.getSum());
-//        System.out.println("cardAccount - " + cardAccount.getSum());
+//        cardAccount.send(account, 1000);
+//        System.out.println("Перевод наличных в account...... " + account.getSum());
 
-        Client ivanIvanov = new LegalPerson();
-        ivanIvanov.printSum();
-        ivanIvanov.addSum(2000);
-        ivanIvanov.printSum();
-        ivanIvanov.subtractSum(1900);
-        ivanIvanov.printSum();
+        IndividualPerson individualPerson = new IndividualPerson();
+        individualPerson.addSum(10000);
+        System.out.println(individualPerson.getSum());
 
+//        trySendToBlockedAccount();
+//        trySendLargeAmount();
 
+    }
+
+    private static void trySendToBlockedAccount() {
+        var l1 = new Account(100);
+        var l2 = new Account(100);
+
+        boolean l2Put = l2.addSum(10.0);
+
+        boolean l2Tol1Send = l1.send(l2, 10);
+
+        boolean l1Withdraw = l1.subtractSum(10.0);
+
+        assertTrue( l2Put && !l2Tol1Send && l1Withdraw ,
+                "l2 уже потратил свои пополнения и send не должен был пройти. " +
+                        "А т.к. send не прошел, то и l1 не должен был потратить счетчик снятия");
+    }
+
+    private static void trySendLargeAmount() {
+        var l1 = new Account(100);
+        var l2 = new Account(100);
+
+        boolean l1ToL2Send = l1.send(l2, 200);
+
+        boolean l1Withdraw = l1.subtractSum(50.0);
+        boolean l2Withdraw = l2.subtractSum(50.0);
+
+        assertTrue( !l1ToL2Send && l1Withdraw && l2Withdraw,
+                "первый send не должен был пройти, т.к. мало денег, но последующие " +
+                        "снятия должны пройти без проблем, т.к. счета не были тронуты");
+    }
+
+    private static void assertTrue(boolean expected, String str) {
+        if (expected) {
+            System.out.println("✅ УСПЕХ. ");
+        } else {
+            System.out.println("🔥 Проблема: " + str);
+        }
     }
 }

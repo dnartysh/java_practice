@@ -7,16 +7,16 @@ public class IndividualPerson extends Client {
     private static final double SPLIT_AMOUNT = 1000;
 
     public void addSum(double amount) {
-        if (isNumbersEquals(amount, SPLIT_AMOUNT)) {
-            setSum(getSum() + amount * MAX_PERCENT_COMMISSION);
+        if (amount < SPLIT_AMOUNT) {
+            deposit(amount * MAX_PERCENT_COMMISSION, true);
         } else {
-            setSum(getSum() + amount * MIN_PERCENT_COMMISSION);
+            deposit(amount * MIN_PERCENT_COMMISSION, true);
         }
     }
 
     public void subtractSum(double amount) {
-        if (isNumbersEquals(amount, getSum())) { // amount <= super.getSum()
-            setSum(getSum() - amount);
+        if (deposit(amount, false)) {
+            System.out.println("Операция успешно выполнена!");
         } else {
             System.out.println("Ошибка операции! Недостаточно средств на счете!");
         }

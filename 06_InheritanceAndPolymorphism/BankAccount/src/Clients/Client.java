@@ -16,8 +16,18 @@ public abstract class Client {
         System.out.println("Остаток на счете - " + sum);
     }
 
-    protected boolean isNumbersEquals(double num1, double num2) {
-        return (num2 - num1) > 0.00000001;
+    protected boolean deposit(double amount, boolean plus) {
+        if (plus) {
+            sum += amount;
+            return true;
+        } else {
+            if (sum >= amount) {
+                sum -= amount;
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     public abstract void addSum(double amount);

@@ -7,20 +7,24 @@ public class DepositAccount extends BankAccount {
     private final LocalDate currentDate = LocalDate.now();
     private LocalDate datePayment;
 
-    public DepositAccount(double sum) {
-        super(sum);
+    public DepositAccount(double amount) {
+        super(amount);
         datePayment = LocalDate.now();
     }
 
-    public void addSum(double sum) {
-        super.addSum(sum);
-        datePayment = LocalDate.now();
+    public boolean addSum(double amount) {
+        if (super.addSum(amount)) {
+            datePayment = LocalDate.now();
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public boolean subtractSum(double sum) {
+    public boolean subtractSum(double amount) {
         if (currentDate.isAfter(datePayment.plusMonths(1))) {
-            if (super.getSum() >= sum) {
-                super.subtractSum(sum);
+            if (super.getSum() >= amount) {
+                super.subtractSum(amount);
                 return true;
             } else {
                 System.out.println("Недостаточно денег на счете!");
