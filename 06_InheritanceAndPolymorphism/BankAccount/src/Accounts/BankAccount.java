@@ -11,7 +11,7 @@ public class BankAccount {
         return sum;
     }
 
-    private void setSum(double amount) {
+    protected void setSum(double amount) {
         sum = amount;
     }
 
@@ -36,8 +36,7 @@ public class BankAccount {
 
     public boolean send(BankAccount receiver, double amount) {
         if (subtractSum(amount)) {
-            receiver.addSum(amount);
-            return true;
+            return receiver.addSum(amount);
         } else {
             return false;
         }

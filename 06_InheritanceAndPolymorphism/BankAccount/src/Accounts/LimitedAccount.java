@@ -1,13 +1,29 @@
 package Accounts;
 
-public class Account extends BankAccount {
+public class LimitedAccount extends BankAccount {
 
     private boolean noDepositAllowed = false;
     private boolean noWithdrawAllowed = false;
     private final static double COMMISSION_IN_RUB = 17; // размер постоянной комиссии
 
-    public Account(double amount) {
+    boolean noDepositAllowedBuf;
+    boolean noWithdrawAllowedBuf;
+    double sumBuf;
+
+    public LimitedAccount(double amount) {
         super(amount);
+    }
+
+    public void saveState() {
+        noDepositAllowedBuf = noDepositAllowed;
+        noWithdrawAllowedBuf = noWithdrawAllowed;
+        sumBuf = getSum();
+    }
+
+    public void restoreState() {
+        setDepositAllowed(noDepositAllowedBuf);
+        setWithdrawAllowed(noWithdrawAllowedBuf);
+        setSum(sumBuf);
     }
 
     private void setDepositAllowed(boolean d) {
@@ -44,4 +60,5 @@ public class Account extends BankAccount {
         }
         return amount;
     }
+
 }

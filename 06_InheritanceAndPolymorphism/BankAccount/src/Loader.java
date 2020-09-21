@@ -1,33 +1,23 @@
-import Accounts.Account;
-import Accounts.CardAccount;
-import Clients.IndividualPerson;
+import Accounts.LimitedAccount;
 
 public class Loader {
 
     public static void main(String[] args) {
-//        Account account = new Account(10000);
-//        System.out.println("Создание счета account...... " + account.getSum());
-//        CardAccount cardAccount = new CardAccount(5000);
-//        System.out.println("Создание счета cardAccount...... " + account.getSum());
-//
-//        account.addSum(400);
-//        System.out.println("Внесение наличных account...... " + account.getSum());
-//
-//        cardAccount.send(account, 1000);
-//        System.out.println("Перевод наличных в account...... " + account.getSum());
 
-        IndividualPerson individualPerson = new IndividualPerson();
-        individualPerson.addSum(10000);
-        System.out.println(individualPerson.getSum());
-
-//        trySendToBlockedAccount();
-//        trySendLargeAmount();
+        if (trySendToBlockedAccount()) {
+            System.err.println("Операция не удалась!");
+        } else {
+            System.out.println("Операция успешно завершена!");
+        }
 
     }
 
-    private static void trySendToBlockedAccount() {
-        var l1 = new Account(100);
-        var l2 = new Account(100);
+    private static boolean trySendToBlockedAccount() {
+        var l1 = new LimitedAccount(100);
+        var l2 = new LimitedAccount(100);
+
+        l1.saveState();
+        l2.saveState();
 
         boolean l2Put = l2.addSum(10.0);
 
@@ -35,14 +25,27 @@ public class Loader {
 
         boolean l1Withdraw = l1.subtractSum(10.0);
 
+        System.out.println(l1.getSum());
+        System.out.println(l2.getSum());
+
         assertTrue( l2Put && !l2Tol1Send && l1Withdraw ,
                 "l2 уже потратил свои пополнения и send не должен был пройти. " +
                         "А т.к. send не прошел, то и l1 не должен был потратить счетчик снятия");
+
+        if (!l2Tol1Send) {
+            l1.restoreState();
+            l2.restoreState();
+        }
+
+        System.out.println(l1.getSum());
+        System.out.println(l2.getSum());
+
+        return l2Put || l2Tol1Send || l1Withdraw;
     }
 
     private static void trySendLargeAmount() {
-        var l1 = new Account(100);
-        var l2 = new Account(100);
+        var l1 = new LimitedAccount(100);
+        var l2 = new LimitedAccount(100);
 
         boolean l1ToL2Send = l1.send(l2, 200);
 
