@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/03_ObjectsAndClasses/AirportsProjects/AirportsProjects.iml" filepath="$PROJECT_DIR$/03_ObjectsAndClasses/AirportsProjects/AirportsProjects.iml" />
+      <module fileurl="file://$PROJECT_DIR$/05_ArraysAndCollections/ArrayListProject/ArrayListProject.iml" filepath="$PROJECT_DIR$/05_ArraysAndCollections/ArrayListProject/ArrayListProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/05_ArraysAndCollections/ArraysProject/ArraysProject.iml" filepath="$PROJECT_DIR$/05_ArraysAndCollections/ArraysProject/ArraysProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/06_InheritanceAndPolymorphism/BankAccount/BankAccount.iml" filepath="$PROJECT_DIR$/06_InheritanceAndPolymorphism/BankAccount/BankAccount.iml" />
+      <module fileurl="file://$PROJECT_DIR$/05_ArraysAndCollections/CarNumberProject/CarNumberProject.iml" filepath="$PROJECT_DIR$/05_ArraysAndCollections/CarNumberProject/CarNumberProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/03_ObjectsAndClasses/Cat/Cat.iml" filepath="$PROJECT_DIR$/03_ObjectsAndClasses/Cat/Cat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/06_InheritanceAndPolymorphism/CompanyAccount/CompanyAccount.iml" filepath="$PROJECT_DIR$/06_InheritanceAndPolymorphism/CompanyAccount/CompanyAccount.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04_NumbersStringsAndDates/DateProject/DateProject.iml" filepath="$PROJECT_DIR$/04_NumbersStringsAndDates/DateProject/DateProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04_NumbersStringsAndDates/GeometryCalculator/GeometryCalculator.iml" filepath="$PROJECT_DIR$/04_NumbersStringsAndDates/GeometryCalculator/GeometryCalculator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04_NumbersStringsAndDates/GumanitaryProject/GumanitaryProject.iml" filepath="$PROJECT_DIR$/04_NumbersStringsAndDates/GumanitaryProject/GumanitaryProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04_NumbersStringsAndDates/IntegerExperiments/IntegerExperiments.iml" filepath="$PROJECT_DIR$/04_NumbersStringsAndDates/IntegerExperiments/IntegerExperiments.iml" />
+      <module fileurl="file://$PROJECT_DIR$/05_ArraysAndCollections/ListEmailProject/ListEmailProject.iml" filepath="$PROJECT_DIR$/05_ArraysAndCollections/ListEmailProject/ListEmailProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04_NumbersStringsAndDates/MinAndMaxValue/MinAndMaxValue.iml" filepath="$PROJECT_DIR$/04_NumbersStringsAndDates/MinAndMaxValue/MinAndMaxValue.iml" />
+      <module fileurl="file://$PROJECT_DIR$/05_ArraysAndCollections/PhoneBook/PhoneBook.iml" filepath="$PROJECT_DIR$/05_ArraysAndCollections/PhoneBook/PhoneBook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/03_ObjectsAndClasses/RoadController/RoadController.iml" filepath="$PROJECT_DIR$/03_ObjectsAndClasses/RoadController/RoadController.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04_NumbersStringsAndDates/StringExperiments/StringExperiments.iml" filepath="$PROJECT_DIR$/04_NumbersStringsAndDates/StringExperiments/StringExperiments.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/java_basics.iml" filepath="$PROJECT_DIR$/.idea/java_basics.iml" />
+    </modules>
+  </component>
+</project>
