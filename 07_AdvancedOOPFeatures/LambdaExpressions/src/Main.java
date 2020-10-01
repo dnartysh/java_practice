@@ -13,23 +13,29 @@ public class Main
     public static void main(String[] args)
     {
         ArrayList<Employee> staff = loadStaffFromFile();
+        staff.sort(((o1, o2) -> {
+            return o1.getSalary().compareTo(o2.getSalary() +
+                    o2.getName().compareTo(o1.getName()));
+        }));
 
-
+        for (Employee employee : staff) {
+            System.out.println(employee);
+        }
     }
 
     private static ArrayList<Employee> loadStaffFromFile()
     {
         ArrayList<Employee> staff = new ArrayList<>();
-        try
-        {
+        try {
             List<String> lines = Files.readAllLines(Paths.get(staffFile));
-            for(String line : lines)
-            {
+            for(String line : lines) {
                 String[] fragments = line.split("\t");
+
                 if(fragments.length != 3) {
                     System.out.println("Wrong line: " + line);
                     continue;
                 }
+
                 staff.add(new Employee(
                     fragments[0],
                     Integer.parseInt(fragments[1]),
