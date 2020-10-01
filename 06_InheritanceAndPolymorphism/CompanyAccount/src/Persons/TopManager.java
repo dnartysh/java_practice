@@ -1,6 +1,9 @@
-package Persons;import Companies.Company;
+package Persons;
 
-public class TopManager extends Person implements Employee {
+import Companies.Company;
+
+public class TopManager extends Person {
+    protected static double salaryTopManager = 45000;
     private final static double PERCENT_BONUS = 1.5;
 
     public TopManager(int id) {
@@ -9,16 +12,17 @@ public class TopManager extends Person implements Employee {
 
     @Override
     public double getSalary() {
-        return SALARY_TOP_MANAGER;
+        return salaryTopManager;
     }
 
-    public double getPrize(Company company) {
-        double fixSalary = SALARY_TOP_MANAGER;
+    @Override
+    public double getSalaryWithPrize(Company company) {
+        double salary = salaryTopManager;
 
-        if (company.getIncome() > 10000000) {
-            fixSalary *= PERCENT_BONUS;
+        if (company.INCOME_COMPANY > 10000000) {
+            salary *= PERCENT_BONUS;
         }
 
-        return fixSalary;
+        return salary;
     }
 }

@@ -2,7 +2,8 @@ package Persons;
 
 import Companies.Company;
 
-public class Manager extends Person implements Employee {
+public class Manager extends Person {
+    protected static double salaryManager = 30000;
 
     public Manager(int id) {
         super(id);
@@ -10,14 +11,14 @@ public class Manager extends Person implements Employee {
 
     @Override
     public double getSalary() {
-        return SALARY_MANAGER;
+        return salaryManager;
     }
 
-    public double getPrize(Company company) {
-        double buf = company.getMaxIncome() - company.getMinIncome();
-        double randomIncome = Math.round((Math.random() * buf) + company.getMinIncome());
-
-        return randomIncome * company.getPercentIncome() / 100;
+    @Override
+    public double getSalaryWithPrize(Company company) {
+        double buf = company.MAX_INCOME - company.MIN_INCOME;
+        double randomIncome = Math.round((Math.random() * buf) + company.MIN_INCOME);
+        double salary = salaryManager + (randomIncome * company.PERCENT_INCOME / 100);
+        return salary;
     }
-
 }

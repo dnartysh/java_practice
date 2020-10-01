@@ -2,7 +2,8 @@ package Persons;
 
 import Companies.Company;
 
-public class Operator extends Person implements Employee {
+public class Operator extends Person {
+    protected static double salaryOperator = 20000;
 
     public Operator(int id) {
         super(id);
@@ -10,11 +11,11 @@ public class Operator extends Person implements Employee {
 
     @Override
     public double getSalary() {
-        return SALARY_OPERATOR;
+        return salaryOperator;
     }
 
     @Override
-    public double getPrize(Company company) {
-        return 0;
+    public double getSalaryWithPrize(Company company) {
+        return salaryOperator;
     }
 }

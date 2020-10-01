@@ -1,70 +1,41 @@
 package Companies;
 
-import Persons.Manager;
-import Persons.Operator;
 import Persons.Person;
-import Persons.TopManager;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Company {
-    private final static double INCOME_COMPANY = 10000001;
-    private final static double MIN_INCOME = 115000;
-    private final static double MAX_INCOME = 140000;
-    private final static double PERCENT_INCOME = 5;
 
-    private String companyName;
-    private HashMap<Integer, Double> listPersons = new HashMap<>();
+    public final double INCOME_COMPANY = 10000001;
+    public final double MIN_INCOME = 115000;
+    public final double MAX_INCOME = 140000;
+    public final double PERCENT_INCOME = 5;
 
-    public Company(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public double getMinIncome() {
-        return MIN_INCOME;
-    }
-
-    public double getMaxIncome() {
-        return MAX_INCOME;
-    }
-
-    public double getPercentIncome() {
-        return PERCENT_INCOME;
-    }
+    private final List<Person> listPersons = new ArrayList<>();
 
     public void hair(Person person) {
-        listPersons.put(person.getId(), person.getSalary() + person.getPrize(this));
+        listPersons.add(person);
     }
 
-    public void hairAll(int operatopCount, int managerCount, int topManagerCount) {
-        while (operatopCount > 0) {
-            Person operator = getNewOperator();
-            listPersons.put(operator.getId(), operator.getSalary() + operator.getPrize(this));
-            operatopCount--;
-        }
-        while (managerCount > 0) {
-            Person manager = getNewManager();
-            listPersons.put(manager.getId(), manager.getSalary() + manager.getPrize(this));
-            managerCount--;
-        }
-        while (topManagerCount > 0) {
-            Person topManager = getNewTopManager();
-            listPersons.put(topManager.getId(), topManager.getSalary() + topManager.getPrize(this));
-            topManagerCount--;
-        }
+    public void hairAll(List<Person> persons) {
+        listPersons.addAll(persons);
     }
 
     public void fire(int id) {
-        if (id > 0 && id < getLastIdListPerson()) {
-            listPersons.remove(id);
+        if (id > 0 && id < listPersons.size()) {
+            listPersons.remove(id - 1);
         } else {
-            System.out.println("Неверно задан id сотрудника!");
+            System.out.println("Введен некорректный id сотрудника!");
         }
+
     }
 
     public void printList() {
-        for (Map.Entry<Integer, Double> map : listPersons.entrySet()) {
-            System.out.println("Сотрудник с id: " + map.getKey() + " - ЗП: " + map.getValue());
+        for (Person person : listPersons) {
+            System.out
+                    .println("Сотрудник с id: " + person.getId() + " получает ЗП(с учетом премии): "
+                            + person.getSalaryWithPrize(this));
         }
     }
 
@@ -72,19 +43,50 @@ public class Company {
         return listPersons.size() + 1;
     }
 
-    public double getIncome() {
-        return INCOME_COMPANY;
+    public void sortListPersonsIncrease() {
+        listPersons.sort(new PersonComparatorIncrease());
     }
 
-    private Person getNewManager() {
-        return new Manager(getLastIdListPerson());
+    public void sortListPersonsDecrease() {
+        listPersons.sort(new PersonComparatorDecrease());
     }
 
-    private Person getNewOperator() {
-        return new Operator(getLastIdListPerson());
+    public Company getCompany() {
+        return this;
     }
 
-    private Person getNewTopManager() {
-        return new TopManager(getLastIdListPerson());
+    public List<Person> getTopSalaryStaff(int count) {
+        if (count > 0 && count < listPersons.size()) {
+            List<Person> sortedList = new ArrayList<>();
+            sortListPersonsDecrease();
+
+            for (int i = 0; i < count; i++) {
+                sortedList.add(listPersons.get(i));
+            }
+
+            return sortedList;
+        } else {
+            System.out.println("Введено некорректное число!");
+
+            return null;
+        }
     }
+
+    public List<Person> getLowestSalaryStaff(int count) {
+        if (count > 0 && count < listPersons.size()) {
+            List<Person> sortedList = new ArrayList<>();
+            sortListPersonsIncrease();
+
+            for (int i = 0; i < count; i++) {
+                sortedList.add(listPersons.get(i));
+            }
+
+            return sortedList;
+        } else {
+            System.out.println("Введено некорректное число!");
+
+            return null;
+        }
+    }
+
 }
