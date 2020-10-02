@@ -3,6 +3,7 @@ package Persons;
 import Companies.Company;
 
 public class Manager extends Person {
+    private Company company;
     protected static double salaryManager = 30000;
 
     public Manager(int id) {

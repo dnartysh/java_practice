@@ -3,6 +3,7 @@ package Persons;
 import Companies.Company;
 
 public class TopManager extends Person {
+    private Company company;
     protected static double salaryTopManager = 45000;
     private final static double PERCENT_BONUS = 1.5;
 

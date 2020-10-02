@@ -2,7 +2,6 @@ package Companies;
 
 import Persons.Person;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Company {
@@ -15,10 +14,15 @@ public class Company {
     private final List<Person> listPersons = new ArrayList<>();
 
     public void hair(Person person) {
+        person.setCompany(this);
         listPersons.add(person);
     }
 
     public void hairAll(List<Person> persons) {
+        for (Person person : persons) {
+            person.setCompany(this);
+        }
+
         listPersons.addAll(persons);
     }
 
@@ -43,48 +47,26 @@ public class Company {
         return listPersons.size() + 1;
     }
 
-    public void sortListPersonsIncrease() {
-        listPersons.sort(new PersonComparatorIncrease());
-    }
-
-    public void sortListPersonsDecrease() {
-        listPersons.sort(new PersonComparatorDecrease());
-    }
-
     public Company getCompany() {
         return this;
     }
 
     public List<Person> getTopSalaryStaff(int count) {
         if (count > 0 && count < listPersons.size()) {
-            List<Person> sortedList = new ArrayList<>();
-            sortListPersonsDecrease();
-
-            for (int i = 0; i < count; i++) {
-                sortedList.add(listPersons.get(i));
-            }
-
-            return sortedList;
+            listPersons.sort(new PersonComparator().reversed());
+            return listPersons.subList(0, count);
         } else {
             System.out.println("Введено некорректное число!");
-
             return null;
         }
     }
 
     public List<Person> getLowestSalaryStaff(int count) {
         if (count > 0 && count < listPersons.size()) {
-            List<Person> sortedList = new ArrayList<>();
-            sortListPersonsIncrease();
-
-            for (int i = 0; i < count; i++) {
-                sortedList.add(listPersons.get(i));
-            }
-
-            return sortedList;
+            listPersons.sort(new PersonComparator());
+            return listPersons.subList(0, count);
         } else {
             System.out.println("Введено некорректное число!");
-
             return null;
         }
     }
