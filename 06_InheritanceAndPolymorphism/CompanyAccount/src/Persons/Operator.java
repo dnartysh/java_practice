@@ -16,7 +16,12 @@ public class Operator extends Person {
     }
 
     @Override
-    public double getSalaryWithPrize(Company company) {
+    public double getSalaryWithPrize() {
         return salaryOperator;
+    }
+
+    @Override
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

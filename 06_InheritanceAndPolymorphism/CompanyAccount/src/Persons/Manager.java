@@ -16,10 +16,14 @@ public class Manager extends Person {
     }
 
     @Override
-    public double getSalaryWithPrize(Company company) {
-        double buf = company.MAX_INCOME - company.MIN_INCOME;
-        double randomIncome = Math.round((Math.random() * buf) + company.MIN_INCOME);
-        double salary = salaryManager + (randomIncome * company.PERCENT_INCOME / 100);
-        return salary;
+    public double getSalaryWithPrize() {
+        double buf = this.company.MAX_INCOME - this.company.MIN_INCOME;
+        double randomIncome = Math.round((Math.random() * buf) + this.company.MIN_INCOME);
+        return salaryManager + (randomIncome * this.company.PERCENT_INCOME / 100);
+    }
+
+    @Override
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

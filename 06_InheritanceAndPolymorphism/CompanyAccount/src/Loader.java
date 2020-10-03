@@ -17,13 +17,13 @@ public class Loader {
 //        sberbank.hair(new TopManager(sberbank.getLastIdListPerson()));
         sberbank.hairAll(getListPersons(sberbank));
 
-        printResults(sberbank, sberbank.getTopSalaryStaff(15), "Самые высокие ЗП:");
-        printResults(sberbank, sberbank.getLowestSalaryStaff(30), "Самые низкие ЗП:");
+        printResults(sberbank.getTopSalaryStaff(15), "Самые высокие ЗП:");
+        printResults(sberbank.getLowestSalaryStaff(30), "Самые низкие ЗП:");
 
         firePersons(sberbank, sberbank.getLastIdListPerson() / 2);
 
-        printResults(sberbank, sberbank.getTopSalaryStaff(15), "Самые высокие ЗП:");
-        printResults(sberbank, sberbank.getLowestSalaryStaff(30), "Самые низкие ЗП:");
+        printResults(sberbank.getTopSalaryStaff(15), "Самые высокие ЗП:");
+        printResults(sberbank.getLowestSalaryStaff(30), "Самые низкие ЗП:");
     }
 
     public static List<Person> getListPersons(Company company) {
@@ -52,11 +52,11 @@ public class Loader {
         }
     }
 
-    public static void printResults(Company company, List<Person> list, String message) {
+    public static void printResults(List<Person> list, String message) {
         System.out.println(message);
 
         for (Person person : list) {
-            System.out.println(person.getSalaryWithPrize(company));
+            System.out.println(person.getSalaryWithPrize());
         }
     }
 }

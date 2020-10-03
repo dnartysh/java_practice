@@ -17,13 +17,18 @@ public class TopManager extends Person {
     }
 
     @Override
-    public double getSalaryWithPrize(Company company) {
+    public double getSalaryWithPrize() {
         double salary = salaryTopManager;
 
-        if (company.INCOME_COMPANY > 10000000) {
+        if (this.company.INCOME_COMPANY > 10000000) {
             salary *= PERCENT_BONUS;
         }
 
         return salary;
+    }
+
+    @Override
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

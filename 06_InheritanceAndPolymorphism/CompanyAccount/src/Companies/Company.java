@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Company {
-
     public final double INCOME_COMPANY = 10000001;
     public final double MIN_INCOME = 115000;
     public final double MAX_INCOME = 140000;
@@ -39,16 +38,12 @@ public class Company {
         for (Person person : listPersons) {
             System.out
                     .println("Сотрудник с id: " + person.getId() + " получает ЗП(с учетом премии): "
-                            + person.getSalaryWithPrize(this));
+                            + person.getSalaryWithPrize());
         }
     }
 
     public int getLastIdListPerson() {
         return listPersons.size() + 1;
-    }
-
-    public Company getCompany() {
-        return this;
     }
 
     public List<Person> getTopSalaryStaff(int count) {
