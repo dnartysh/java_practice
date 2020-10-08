@@ -1,9 +1,9 @@
+import com.skillbox.airport.Flight.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Stream;
+import com.skillbox.airport.*;
 
 public class Main {
 
@@ -12,6 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         ArrayList<Employee> staff = loadStaffFromFile();
+/*
         staff.sort(((o1, o2) -> {
             if (o1.getSalary().compareTo(o2.getSalary()) == 0) {
                 return o1.getName().compareTo(o2.getName());
@@ -22,9 +23,35 @@ public class Main {
 
         staff.sort(Comparator.comparing(Employee::getSalary).thenComparing(Employee::getName));
 
-        for (Employee employee : staff) {
-            System.out.println(employee);
-        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2017, 1, 1);
+        Date currentDate = calendar.getTime();
+
+        staff.stream()
+                .filter((e) -> e.getWorkStart().getYear() == currentDate.getYear())
+                .max(Comparator.comparing(Employee::getSalary))
+                .ifPresent(System.out::println);
+*/
+
+        Airport airport = Airport.getInstance();
+
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = new Date();
+        Date plusDate = new Date();
+
+        currentDate.setTime(calendar.getTimeInMillis());
+
+        calendar.add(Calendar.HOUR, 2);
+        plusDate.setTime(calendar.getTimeInMillis());
+
+        airport.getTerminals()
+                .forEach(terminal -> terminal.getFlights()
+                        .stream()
+                        .filter(flight -> {
+                            return (flight.getDate().getHours() >= currentDate.getHours()
+                                    || flight.getDate().getHours() <= plusDate.getHours())
+                                    && (flight.getDate().getMinutes() <= plusDate.getMinutes());
+                        }).forEach(System.out::println));
     }
 
     private static ArrayList<Employee> loadStaffFromFile() {
