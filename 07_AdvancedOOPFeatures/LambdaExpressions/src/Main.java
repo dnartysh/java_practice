@@ -38,20 +38,30 @@ public class Main {
         Calendar calendar = Calendar.getInstance();
         Date currentDate = new Date();
         Date plusDate = new Date();
-
         currentDate.setTime(calendar.getTimeInMillis());
 
         calendar.add(Calendar.HOUR, 2);
         plusDate.setTime(calendar.getTimeInMillis());
 
+
+
         airport.getTerminals()
-                .forEach(terminal -> terminal.getFlights()
-                        .stream()
-                        .filter(flight -> {
-                            return (flight.getDate().getHours() >= currentDate.getHours()
-                                    || flight.getDate().getHours() <= plusDate.getHours())
+                .stream().flatMap(terminal -> terminal.getFlights().stream())
+                .filter(flight ->
+                {
+                    return (flight.getDate().getDay() == currentDate.getDay()
+                                    && flight.getDate().getHours() >= currentDate.getHours()
+                                    && flight.getDate().getHours() <= plusDate.getHours())
                                     && (flight.getDate().getMinutes() <= plusDate.getMinutes());
-                        }).forEach(System.out::println));
+                })
+                .sorted(new Comparator<Flight>() {
+                    @Override
+                    public int compare(Flight o1, Flight o2) {
+                        return Long.compare(o1.getDate().getTime(), o2.getDate().getTime());
+                    }
+                })
+                .forEach(f -> System.out.println(f.getCode() + " " + f.getAircraft() + " " + f.getDate() + " "
+                + f.getType()));
     }
 
     private static ArrayList<Employee> loadStaffFromFile() {
