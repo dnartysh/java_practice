@@ -22,7 +22,12 @@ public class Main {
                 } else if (tokens[0].equals("list")) {
                     executor.listCustomers();
                 } else if (tokens[0].equals("remove")) {
-                    executor.removeCustomer(tokens[1]);
+                    if (tokens.length > 1) {
+                        executor.removeCustomer(tokens[1]);
+                    } else {
+                        throw new RuntimeException("Неправильно введен запрос. Примеры запросов:\n"
+                                + commandExamples);
+                    }
                 } else if (tokens[0].equals("count")) {
                     System.out.println("There are " + executor.getCount() + " customers");
                 } else if (tokens[0].equals("help")) {
