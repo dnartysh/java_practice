@@ -1,29 +1,24 @@
 package core;
 
-public class Station implements Comparable<Station>
-{
+public class Station implements Comparable<Station> {
     private Line line;
     private String name;
 
-    public Station(String name, Line line)
-    {
+    public Station(String name, Line line) {
         this.name = name;
         this.line = line;
     }
 
-    public Line getLine()
-    {
+    public Line getLine() {
         return line;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public int compareTo(Station station)
-    {
+    public int compareTo(Station station) {
         int lineComparison = line.compareTo(station.getLine());
         if(lineComparison != 0) {
             return lineComparison;
@@ -32,14 +27,12 @@ public class Station implements Comparable<Station>
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return compareTo((Station) obj) == 0;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return name;
     }
 }

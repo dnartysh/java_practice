@@ -3,48 +3,40 @@ package core;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Line implements Comparable<Line>
-{
+public class Line implements Comparable<Line> {
     private int number;
     private String name;
     private List<Station> stations;
 
-    public Line(int number, String name)
-    {
+    public Line(int number, String name) {
         this.number = number;
         this.name = name;
         stations = new ArrayList<>();
     }
 
-    public int getNumber()
-    {
+    public int getNumber() {
         return number;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void addStation(Station station)
-    {
+    public void addStation(Station station) {
         stations.add(station);
     }
 
-    public List<Station> getStations()
-    {
+    public List<Station> getStations() {
         return stations;
     }
 
     @Override
-    public int compareTo(Line line)
-    {
+    public int compareTo(Line line) {
         return Integer.compare(number, line.getNumber());
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return compareTo((Line) obj) == 0;
     }
 }
