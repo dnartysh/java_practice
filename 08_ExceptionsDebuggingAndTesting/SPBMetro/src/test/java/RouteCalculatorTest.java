@@ -2,7 +2,6 @@ import core.Line;
 import core.Station;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -78,94 +77,102 @@ public class RouteCalculatorTest {
         for (Station station : stationsSet) {
             Line line = station.getLine();
             line.addStation(station);
+            stationIndex.addStation(station);
         }
 
         ArrayList<Station> connectedStation = new ArrayList<>();
 
-        connectedStation.add(new Station("Площадь Восстания", red));
-        connectedStation.add(new Station("Маяковская", green));
+        connectedStation.add(stationIndex.getStation("Площадь Восстания"));
+        connectedStation.add(stationIndex.getStation("Маяковская"));
         stationIndex.addConnection(connectedStation);
         connectedStation.clear();
 
-        connectedStation.add(new Station("Достоевская", orange));
-        connectedStation.add(new Station("Владимирская", red));
+        connectedStation.add(stationIndex.getStation("Достоевская"));
+        connectedStation.add(stationIndex.getStation("Владимирская"));
         stationIndex.addConnection(connectedStation);
         connectedStation.clear();
 
-        connectedStation.add(new Station("Площадь Александра Невского - 1", green));
-        connectedStation.add(new Station("Площадь Александра Невского - 2", orange));
+        connectedStation.add(stationIndex.getStation("Площадь Александра Невского - 1"));
+        connectedStation.add(stationIndex.getStation("Площадь Александра Невского - 2"));
         stationIndex.addConnection(connectedStation);
         connectedStation.clear();
 
-        connectedStation.add(new Station("Звенигородская", violet));
-        connectedStation.add(new Station("Пушкинская", red));
+        connectedStation.add(stationIndex.getStation("Звенигородская"));
+        connectedStation.add(stationIndex.getStation("Пушкинская"));
         stationIndex.addConnection(connectedStation);
         connectedStation.clear();
 
         return true;
     }
 
+    private List<Station> getRouteByString(String stringRoute) {
+        List<Station> stations = new ArrayList<>();
+
+        String[] stationsList = stringRoute.split("\\-\\>");
+
+        for (String value : stationsList) {
+            stations.add(stationIndex.getStation(value.trim()));
+        }
+
+        return stations;
+    }
+
     @Test
     public void getShortestRouteOneLine() {
-        ArrayList<Station> expected = new ArrayList<>();
-        Station stationA = new Station("Новочеркасская", orange);
-        Station stationB = new Station("Спасская", orange);
+        Station stationA = stationIndex.getStation("Новочеркасская");
+        Station stationB = stationIndex.getStation("Спасская");
 
-        expected.add(new Station("Новочеркасская", orange));
-        expected.add(new Station("Площадь Александра Невского - 2", orange));
-        expected.add(new Station("Лиговский проспект", orange));
-        expected.add(new Station("Достоевская", orange));
-        expected.add(new Station("Спасская", orange));
+        List<Station> expected = getRouteByString("Новочеркасская -> "
+                + "Площадь Александра Невского - 2 ->"
+                + "Лиговский проспект ->"
+                + "Достоевская ->"
+                + "Спасская");
 
         assertEquals(expected, routeCalculator.getShortestRoute(stationA, stationB));
     }
 
     @Test
     public void getShortestRouteTwoLines() {
-        ArrayList<Station> expected = new ArrayList<>();
         Station stationA = new Station("Новочеркасская", orange);
         Station stationB = new Station("Василеостровская", green);
 
-        expected.add(new Station("Новочеркасская", orange));
-        expected.add(new Station("Площадь Александра Невского - 2", orange));
-        expected.add(new Station("Площадь Александра Невского - 1", green));
-        expected.add(new Station("Маяковская", green));
-        expected.add(new Station("Гостиный двор", green));
-        expected.add(new Station("Василеостровская", green));
+        List<Station> expected = getRouteByString("Новочеркасская ->"
+                + "Площадь Александра Невского - 2 ->"
+                + "Площадь Александра Невского - 1 ->"
+                + "Маяковская ->"
+                + "Гостиный двор ->"
+                + "Василеостровская");
 
         assertEquals(expected, routeCalculator.getShortestRoute(stationA, stationB));
     }
 
     @Test
     public void getShortestRouteThreeLines() {
-        ArrayList<Station> expected = new ArrayList<>();
         Station stationA = new Station("Волковская", violet);
         Station stationB = new Station("Василеостровская", green);
 
-        expected.add(new Station("Волковская", violet));
-        expected.add(new Station("Звенигородская", violet));
-        expected.add(new Station("Пушкинская", red));
-        expected.add(new Station("Владимирская", red));
-        expected.add(new Station("Площадь Восстания", red));
-        expected.add(new Station("Маяковская", green));
-        expected.add(new Station("Гостиный двор", green));
-        expected.add(new Station("Василеостровская", green));
+        List<Station> expected = getRouteByString("Волковская ->"
+                + "Звенигородская ->"
+                + "Пушкинская ->"
+                + "Владимирская ->"
+                + "Площадь Восстания ->"
+                + "Маяковская ->"
+                + "Гостиный двор ->"
+                + "Василеостровская");
 
         assertEquals(expected, routeCalculator.getShortestRoute(stationA, stationB));
     }
 
     @Test
     public void calculateDuration() {
-        ArrayList<Station> route = new ArrayList<>();
-
-        route.add(new Station("Волковская", violet));
-        route.add(new Station("Звенигородская", violet));
-        route.add(new Station("Пушкинская", red));
-        route.add(new Station("Владимирская", red));
-        route.add(new Station("Площадь Восстания", red));
-        route.add(new Station("Маяковская", green));
-        route.add(new Station("Гостиный двор", green));
-        route.add(new Station("Василеостровская", green));
+        List<Station> route = getRouteByString("Волковская ->"
+                + "Звенигородская ->"
+                + "Пушкинская ->"
+                + "Владимирская ->"
+                + "Площадь Восстания ->"
+                + "Маяковская ->"
+                + "Гостиный двор ->"
+                + "Василеостровская");
 
         double expected = 19.5;
 
