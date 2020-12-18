@@ -17,9 +17,9 @@ public class Main {
     private static Double filesSize;
 
     public static void main(String[] args) {
-        while (true) {
-            getFoldersAndFiles(getInputPath());
-        }
+//        while (true) {
+            getFoldersAndFiles(args[0]);
+//        }
     }
 
     private static void getFoldersAndFiles(String path) {
