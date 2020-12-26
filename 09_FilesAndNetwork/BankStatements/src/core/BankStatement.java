@@ -14,9 +14,6 @@ public class BankStatement {
     private TreeMap<String, TreeSet<Double>> listOfMovements;
     private TreeSet<Double> listAmount;
 
-    private double income;
-    private double expenses;
-
     public BankStatement(String path) throws IOException {
         this.path = path;
         getAllLinesInFile();
@@ -52,26 +49,22 @@ public class BankStatement {
         listOfMovements = new TreeMap<>();
 
         for (int i = 1; i < listWithAllLines.size(); i++) {
-            String[] list = listWithAllLines.get(i).split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+            String[] rows = listWithAllLines.get(i).split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
-            if (list.length > 0) {
-                income = Double.valueOf(formatDoubleValue(list[list.length - 2]));
-                expenses = Double.valueOf(formatDoubleValue(list[list.length - 1]));
-                String company = getCompany(list);
+            if (rows.length > 0) {
+                double income = Double.parseDouble(formatDoubleValue(rows[rows.length - 2]));
+                double expenses = Double.parseDouble(formatDoubleValue(rows[rows.length - 1]));
+                String company = getCompany(rows);
 
                 if (!listOfMovements.containsKey(company)) {
-                    if (setListOfOperations()) {
-                        listOfMovements.put(company, listAmount);
-                    }
+                    listOfMovements.putIfAbsent(company, new TreeSet<>());
+                    listOfMovements.get(company).add(income > 0 ? income : expenses);
                 } else {
                     TreeSet<Double> amounts = listOfMovements.get(company);
                     amounts.add(getTypeOperation(income, expenses) > 0 ? income : expenses * -1);
                 }
             }
         }
-
-        income = 0;
-        expenses = 0;
     }
 
     private String formatDoubleValue(String value) {
@@ -86,19 +79,5 @@ public class BankStatement {
         String[] listCompanies = list[list.length - 3].split("((\\\\)|(\\/))|(\\s{2,})");
 
         return listCompanies[4];
-    }
-
-    private boolean setListOfOperations() {
-        listAmount = new TreeSet<>();
-
-        if (income > 0) {
-            listAmount.add(income);
-            return true;
-        } else if (expenses > 0) {
-            listAmount.add(expenses * -1);
-            return true;
-        }
-
-        return false;
     }
 }
