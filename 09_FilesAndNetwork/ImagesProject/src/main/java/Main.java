@@ -4,11 +4,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 public class Main {
 
@@ -16,7 +14,7 @@ public class Main {
     private final static String DOWNLOAD_PATH = "src/main/img/";
 
     public static void main(String[] args) throws IOException {
-        Document doc = getDocumentPage(connectPage());
+        Document doc = getDocumentPage(URL_SITE);
 
         if (doc != null) {
             List<String> listImages = getListImages(doc);
@@ -53,9 +51,7 @@ public class Main {
     private static List<String> getListImages(Document doc) {
         List<String> listImages = new ArrayList<>();
 
-        Elements elements = doc.select("img");
-
-        elements.forEach(element -> {
+        doc.select("img").forEach(element -> {
 
             for (Attribute att : element.attributes()) {
                 if (att.getKey().equals("src")) {
@@ -67,13 +63,9 @@ public class Main {
         return listImages;
     }
 
-    private static Connection connectPage() {
-        return Jsoup.connect(URL_SITE);
-    }
-
-    private static Document getDocumentPage(Connection connection) {
+    private static Document getDocumentPage(String url) {
         try {
-            return connection.get();
+            return Jsoup.connect(url).get();
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;
