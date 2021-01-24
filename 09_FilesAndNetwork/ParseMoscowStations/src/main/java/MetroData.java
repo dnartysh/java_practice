@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class MetroData {
     private List<Line> lines;
-    private Map<String, List<String>> stations;
+    private Map<String, List<Station>> stations;
     private List<List<Connection>> connections;
 
     public MetroData() {
@@ -22,7 +22,7 @@ public class MetroData {
         return connections;
     }
 
-    public Map<String, List<String>> getStations() {
+    public Map<String, List<Station>> getStations() {
         return stations;
     }
 
@@ -44,10 +44,10 @@ public class MetroData {
 
     public void addStation(String number, String name) {
         if (stations.containsKey(number)) {
-            stations.get(number).add(name);
+            stations.get(number).add(new Station(number, name));
         } else {
-            List<String> list = new ArrayList<>();
-            list.add(name);
+            List<Station> list = new ArrayList<>();
+            list.add(new Station(number, name));
             stations.put(number, list);
         }
     }

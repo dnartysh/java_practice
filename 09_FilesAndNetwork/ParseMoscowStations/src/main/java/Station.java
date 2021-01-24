@@ -1,3 +1,6 @@
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public class Station {
 
     private String number;
@@ -8,10 +11,12 @@ public class Station {
         this.name = name;
     }
 
+    @JsonIgnore
     public String getNumber() {
         return number;
     }
 
+    @JsonValue
     public String getName() {
         return name;
     }
