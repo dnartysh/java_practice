@@ -11,25 +11,17 @@ public class Loader {
         String username = "testtest";
         String password = "1234567890";
 
-        try {
-            Connection connection = DriverManager.getConnection(url, username, password);
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery("select course_name, "
-                    + "timestampdiff(month, min(subscription_date), max(subscription_date)) / count(*) "
-                    + "as avg_sell from PurchaseList group by course_name;");
-
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+                Statement statement = connection.createStatement();
+                ResultSet result = statement.executeQuery("select course_name, "
+                        + "timestampdiff(month, min(subscription_date), max(subscription_date)) / count(*) "
+                        + "as avg_sell from PurchaseList group by course_name;"); ) {
             while(result.next()) {
                 System.out.println(result.getString("course_name") +
                         " - " + result.getDouble("avg_sell"));
             }
-
-            result.close();
-            statement.close();
-            connection.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
-
 }
