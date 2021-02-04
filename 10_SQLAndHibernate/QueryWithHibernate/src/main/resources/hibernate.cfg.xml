@@ -5,13 +5,13 @@
   <session-factory>
     <!-- JDBC Database connection settings -->
     <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-    <property name="connection.url">jdbc:mysql://localhost:3306/skillbox?useSSL=false</property>
+    <property name="connection.url">jdbc:mysql://localhost:3306/skillbox?allowPublicKeyRetrieval=true&amp;useSSL=false</property>
     <property name="connection.username">testtest</property>
     <property name="connection.password">1234567890</property>
     <!-- JDBC connection pool settings ... using built-in test pool -->
     <property name="connection.pool_size">10</property>
     <!-- Select our SQL dialect -->
-    <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+    <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
     <!-- Echo the SQL to stdout -->
     <property name="show_sql">true</property>
     <!-- Set the current session context -->
@@ -20,6 +20,8 @@
     <property name="hbm2ddl.auto">validate</property>
 
     <mapping class="Course"></mapping>
+    <mapping class="Student"></mapping>
     <mapping class="Teacher"></mapping>
+    <mapping class="Subscription"></mapping>
   </session-factory>
 </hibernate-configuration>
