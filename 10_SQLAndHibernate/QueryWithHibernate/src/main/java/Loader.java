@@ -22,8 +22,8 @@ public class Loader {
         Student student = session.get(Student.class, 1);
         Course course = session.get(Course.class, 2);
         Subscription sp = session.get(Subscription.class, new SubscriptionKey(student, course));
-        System.out.println("Студент: " + sp.getStudent().getName() +
-                " Подписка на курс: " + sp.getCourse().getName() + "\n------\n");
+        System.out.println("Студент: " + sp.getId().getStudent().getName() +
+                " Подписка на курс: " + sp.getId().getCourse().getName() + "\n------\n");
 
         System.out.println("Список курсов по учителю:");
         List<Course> courses = session.get(Teacher.class, 10).getCourses();
@@ -36,9 +36,9 @@ public class Loader {
         System.out.println("Список курсов по студенту:");
         List<Subscription> sbList = session.get(Student.class, 10).getSubscriptionsList();
         for (Subscription sb : sbList) {
-            System.out.println("Студент - " + sb.getStudent().getName() +
-                    ", подписка на курс - " + sb.getCourse().getName() +
-                    ", цена курса - " + sb.getCourse().getPrice());
+            System.out.println("Студент - " + sb.getId().getStudent().getName() +
+                    ", подписка на курс - " + sb.getId().getCourse().getName() +
+                    ", цена курса - " + sb.getId().getCourse().getPrice());
         }
         System.out.println("\n------\n");
 

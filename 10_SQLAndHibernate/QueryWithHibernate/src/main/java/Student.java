@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -12,19 +13,26 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "Students")
 public class Student {
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Setter
     private String name;
+    @Setter
     private int age;
 
+    @Setter
     @Column(name = "registration_date")
     private Date registrationDate;
 
     @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL)
-    private List<Subscription> subscriptionsList;
+    private List<Subscription> subscriptionsList = new ArrayList<>();
+
+    public void addSubscription(Subscription sub) {
+        subscriptionsList.add(sub);
+    }
 }

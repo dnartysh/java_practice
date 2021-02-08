@@ -10,10 +10,10 @@ import lombok.Setter;
 @Setter
 public class SubscriptionKey implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "student_id", insertable = false, updatable = false)
+    @JoinColumn(name = "student_id")
     private Student student;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "course_id", insertable = false, updatable = false)
+    @JoinColumn(name = "course_id")
     private Course course;
 
     public SubscriptionKey() {}
