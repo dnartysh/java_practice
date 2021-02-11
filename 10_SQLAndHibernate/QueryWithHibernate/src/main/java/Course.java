@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +35,7 @@ public class Course {
     private String description;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Teacher teacher;
 
     @Setter
@@ -46,7 +47,7 @@ public class Course {
     @Column(name = "price_per_hour")
     private float pricePerHour;
 
-    @OneToMany(mappedBy = "id.course", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Subscription> subscriptionsList;
 
     public void addSubscription(Subscription subscription) {

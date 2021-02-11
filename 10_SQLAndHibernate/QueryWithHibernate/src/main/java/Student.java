@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,7 +30,7 @@ public class Student {
     @Column(name = "registration_date")
     private Date registrationDate;
 
-    @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Subscription> subscriptionsList = new ArrayList<>();
 
     public void addSubscription(Subscription sub) {
