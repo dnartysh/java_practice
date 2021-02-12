@@ -21,9 +21,9 @@ public class Teacher {
     @Setter
     private String name;
     @Setter
-    private int salary;
+    private Integer salary;
     @Setter
-    private int age;
+    private Integer age;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "teacher", fetch = FetchType.LAZY)
     private List<Course> courses;

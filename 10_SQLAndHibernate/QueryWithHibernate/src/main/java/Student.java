@@ -24,7 +24,7 @@ public class Student {
     @Setter
     private String name;
     @Setter
-    private int age;
+    private Integer age;
 
     @Setter
     @Column(name = "registration_date")

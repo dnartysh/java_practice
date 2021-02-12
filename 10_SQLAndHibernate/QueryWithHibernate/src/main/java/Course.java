@@ -25,7 +25,7 @@ public class Course {
     @Setter
     private String name;
     @Setter
-    private int duration;
+    private Integer duration;
 
     @Setter
     @Enumerated(EnumType.STRING)
@@ -40,12 +40,14 @@ public class Course {
 
     @Setter
     @Column(name = "students_count")
-    private int studentsCount;
-    private int price;
+    private Integer studentsCount;
+
+    @Setter
+    private Integer price;
 
     @Setter
     @Column(name = "price_per_hour")
-    private float pricePerHour;
+    private Float pricePerHour;
 
     @OneToMany(mappedBy = "id.course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Subscription> subscriptionsList;

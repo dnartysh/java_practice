@@ -11,11 +11,11 @@ import lombok.Setter;
 public class LinkedPurchaseListKey implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
-    private int studentId;
+    private Integer studentId;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
-    private int courseId;
+    private Integer courseId;
 
     public LinkedPurchaseListKey() {}
 
