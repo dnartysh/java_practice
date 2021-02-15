@@ -1,6 +1,4 @@
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -15,8 +13,8 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class Loader {
-    private static Logger logger = LogManager.getLogger();
-    private static Set<String> notFoundedItems = new HashSet<>();
+
+    private static Logger loggerError = LogManager.getLogger();
 
     public static void main(String[] args) {
 
@@ -26,76 +24,72 @@ public class Loader {
 
             int studentId;
             int courseId;
-            List<Object> listPurchases = getListFromClass(session, PurchaseList.class);
+            List<PurchaseList> listPurchases = new Repository<>(PurchaseList.class).getAll(session);
 
-            for (Object item : listPurchases) {
-                PurchaseList purchase = (PurchaseList) item;
+            for (PurchaseList purchase : listPurchases) {
                 studentId = getStudentId(session, purchase.getId().getStudentName());
                 courseId = getCourseId(session, purchase.getId().getCourseName());
 
-                if (studentId != 0 && courseId != 0) {
-                    session.createSQLQuery("INSERT INTO LinkedPurchaseList"
-                            + "(student_id, course_id, student_name, "
-                            + "course_name, price, subscription_date) VALUES ("
-                            + studentId + ", "
-                            + courseId + ", "
-                            + "'" + purchase.getId().getStudentName() + "', "
-                            + "'" + purchase.getId().getCourseName() + "', "
-                            + purchase.getPrice() + ", "
-                            + "'" + purchase.getSubscriptionDate() + "')").executeUpdate();
-                } else {
-                    notFoundedItems.add(studentId == 0 ? purchase.getId().getStudentName()
-                            : purchase.getId().getCourseName());
-                    printErrorMessage(studentId == 0 ? "Студент: " +
-                            purchase.getId().getStudentName() + " - не найден" : "Курс: " +
-                            purchase.getId().getCourseName() + " - не найден");
-                }
-            }
-
-            if (notFoundedItems.size() != 0) {
-                printErrorMessage();
+                session.createSQLQuery("INSERT INTO LinkedPurchaseList"
+                        + "(student_id, course_id, student_name, "
+                        + "course_name, price, subscription_date) VALUES ("
+                        + studentId + ", "
+                        + courseId + ", "
+                        + "'" + purchase.getId().getStudentName() + "', "
+                        + "'" + purchase.getId().getCourseName() + "', "
+                        + purchase.getPrice() + ", "
+                        + "'" + purchase.getSubscriptionDate() + "')").executeUpdate();
             }
 
             transaction.commit();
         } catch (Exception ex) {
+            loggerError.error(ex);
             ex.printStackTrace();
         }
     }
 
-    public static void printErrorMessage() {
-        System.out.println("Следующие объекты не найдены в БД:");
-        notFoundedItems.forEach(System.out::println);
-        System.out.println("Более подробно см. лог 'logs/exceptions.log'");
-    }
+    public static int getStudentId(Session session, String name) throws Exception {
+        List<Student> foundedList = new Repository<>(Student.class).getAll(session);
 
-    public static void printErrorMessage(String message) {
-        logger.error(message);
-    }
-
-    public static int getStudentId(Session session, String name) {
-        List<Object> foundedList = getListFromClass(session, Student.class);
-
-        for (Object item : foundedList) {
-            Student student = (Student) item;
+        for (Student student : foundedList) {
             if (student.getName().equals(name)) {
                 return student.getId();
             }
         }
 
-        return 0;
+        throw new Exception("Студент с именем: " + name + " не найден");
     }
 
-    public static int getCourseId(Session session, String name) {
-        List<Object> foundedList = getListFromClass(session, Course.class);
+    public static int getCourseId(Session session, String name) throws Exception {
+        List<Course> foundedList = new Repository<>(Course.class).getAll(session);
 
-        for (Object item : foundedList) {
-            Course course = (Course) item;
+        for (Course course : foundedList) {
             if (course.getName().equals(name)) {
                 return course.getId();
             }
         }
 
-        return 0;
+        throw new Exception("Курс с именем: " + name + " не найден");
+    }
+
+    public int getStudentIdWithStream(Session session, String name) throws Exception {
+        return new Repository<>(Student.class).getAll(session)
+                .stream()
+                .filter(st -> st.getName().equals(name))
+                .map(Student::getId)
+                .findFirst()
+                .orElseThrow(() -> new Exception("Студент с именем:" + name +
+                        " не найден"));
+    }
+
+    public int getCourseIdWithStream(Session session, String name) throws Exception {
+        return new Repository<>(Course.class).getAll(session)
+                .stream()
+                .filter(c -> c.getName().equals(name))
+                .map(Course::getId)
+                .findFirst()
+                .orElseThrow(() -> new Exception("Курс с именем: " + name +
+                        " не найден"));
     }
 
     private static List<Object> getListFromClass(Session session, Class c) {
