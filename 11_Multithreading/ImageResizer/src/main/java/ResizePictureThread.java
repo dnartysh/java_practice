@@ -1,14 +1,16 @@
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.imageio.ImageIO;
 import org.imgscalr.Scalr;
 
 public class ResizePictureThread implements Runnable {
-    private int newWidth;
-    private File[] files;
-    private String dstFolder;
 
-    public ResizePictureThread(int newWidth, File[] files, String dstFolder) {
+    private final int newWidth;
+    private final ConcurrentLinkedQueue<File> files;
+    private final String dstFolder;
+
+    public ResizePictureThread(int newWidth, ConcurrentLinkedQueue<File> files, String dstFolder) {
         this.newWidth = newWidth;
         this.files = files;
         this.dstFolder = dstFolder;
@@ -17,10 +19,14 @@ public class ResizePictureThread implements Runnable {
     @Override
     public void run() {
         try {
-            for (File file : files) {
+            while (files.iterator().hasNext()) {
+                long start = System.currentTimeMillis();
+
+                File file = files.poll();
                 BufferedImage image = ImageIO.read(file);
                 if (image == null) {
-                    continue;
+                    throw new NullPointerException(
+                            "Файл: " + file.getName() + " не удалось прочитать");
                 }
 
                 int newHeight = (int) Math.round(image.getHeight() /
@@ -31,7 +37,9 @@ public class ResizePictureThread implements Runnable {
                 File newFile = new File(dstFolder + "/" + file.getName());
                 ImageIO.write(newImage, "jpg", newFile);
 
-                System.out.println(Thread.currentThread().getName() +
+                long timeThread = System.currentTimeMillis() - start;
+
+                System.out.println(Thread.currentThread().getName() + " | Time: " + timeThread +
                         " | File: " + newFile.getName());
             }
         } catch (Exception ex) {

@@ -1,11 +1,12 @@
 import java.io.File;
+import java.util.Arrays;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Main {
     private static final int newWidth = 300;
-    private static int startPoint;
-    private static int middleSize;
+    private static ConcurrentLinkedQueue<File> queueFiles;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         String srcFolder = "E:\\STUDY\\Folders_and_files\\src";
         String dstFolder = "E:\\STUDY\\Folders_and_files\\dst";
 
@@ -14,31 +15,16 @@ public class Main {
         File[] files = srcDir.listFiles();
         int countCores = getCountProcessorCores();
 
-        if (countCores > files.length) {
-            middleSize = 1;
-        } else {
-            middleSize = files.length / countCores;
+        if (files.length > 0) {
+            queueFiles = new ConcurrentLinkedQueue<>(Arrays.asList(files));
         }
-        startPoint = 0;
 
-        do {
-            if (countCores == 1 && middleSize != files.length) {
-                middleSize = files.length - startPoint;
-            }
+        ResizePictureThread resizePictureThread = new ResizePictureThread(newWidth, queueFiles, dstFolder);
 
-            File[] resizedListFiles = new File[middleSize];
-
-            if (startPoint < files.length) {
-                System.arraycopy(files, startPoint, resizedListFiles, 0, resizedListFiles.length);
-            } else {
-                break;
-            }
-
-            startPoint += resizedListFiles.length;
+        while (countCores > 0) {
+            new Thread(resizePictureThread).start();
             countCores--;
-
-            new Thread(new ResizePictureThread(newWidth, resizedListFiles, dstFolder)).start();
-        } while (countCores > 0);
+        }
     }
 
     public static int getCountProcessorCores() {
