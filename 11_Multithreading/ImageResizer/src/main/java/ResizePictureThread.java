@@ -19,10 +19,14 @@ public class ResizePictureThread implements Runnable {
     @Override
     public void run() {
         try {
-            while (files.iterator().hasNext()) {
+            while (true) {
                 long start = System.currentTimeMillis();
-
                 File file = files.poll();
+
+                if (file == null) {
+                    break;
+                }
+
                 BufferedImage image = ImageIO.read(file);
                 if (image == null) {
                     throw new NullPointerException(
