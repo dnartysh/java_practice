@@ -9,6 +9,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 public class Main {
+
     private static final int newWidth = 300;
     private static ConcurrentLinkedQueue<File> queueFiles;
     private static ExecutorService executorService;
@@ -20,18 +21,10 @@ public class Main {
         File srcDir = new File(srcFolder);
         File[] files = srcDir.listFiles();
         int countCores = getCountProcessorCores();
-
         executorService = Executors.newFixedThreadPool(countCores);
 
-        if (files.length > 0) {
-            queueFiles = new ConcurrentLinkedQueue<>(Arrays.asList(files));
-        }
-
-        ResizePictureThread resizePictureThread = new ResizePictureThread(newWidth, queueFiles, dstFolder);
-
-        while (countCores > 0) {
-            executorService.execute(resizePictureThread);
-            countCores--;
+        for (File file : files) {
+            executorService.execute(new ResizePictureThread(newWidth, file, dstFolder));
         }
 
         executorService.shutdown();
