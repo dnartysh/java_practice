@@ -1,8 +1,14 @@
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class Test {
     private Bank bank;
     private int countAccounts;
     private int countIterations;
+    private long initialBalance = 100000;
     private final String ACC_NUM_PATTERN = "1-";
+    private Random random = new Random();
 
     public Test(Bank bank, int countAccounts, int countIterations) {
         this.bank = bank;
@@ -12,51 +18,38 @@ public class Test {
 
     private void addAccounts() {
         for (int i = 0; i <= countAccounts; i++) {
-            long randomAmount = Math.round(100000 * Math.random());
-            bank.addAccount(ACC_NUM_PATTERN + i, randomAmount);
+            bank.addAccount(ACC_NUM_PATTERN + i, initialBalance);
         }
     }
 
-    private void getIterations() throws Exception {
-        while (countIterations > 0) {
-            for (int i = 0; i <= countAccounts; i++) {
-                for (int j = 0; j <= countAccounts; j++) {
-                    if (i != j) {
-                        if (Math.random() < 0.005) {
-                            printBalance(i, j);
-
-                            long randomAmount = Math.round(53000 * Math.random());
-                            bank.transfer(ACC_NUM_PATTERN + i,
-                                    ACC_NUM_PATTERN + j, randomAmount);
-
-                            printBalance(i, j);
-                        } else {
-                            printBalance(i, j);
-
-                            long randomAmount = Math.round(30 * Math.random());
-                            bank.transfer(ACC_NUM_PATTERN + i,
-                                    ACC_NUM_PATTERN + j, randomAmount);
-
-                            printBalance(i, j);
-                        }
-                    }
-                }
-            }
-
-            countIterations--;
-        }
-    }
-
-    public void printBalance(int i, int j) throws Exception {
-        System.out.println("from: " +
-                bank.getBalance(ACC_NUM_PATTERN + i) +
-                " | to: " +
-                bank.getBalance(ACC_NUM_PATTERN + j));
-    }
-
-    public void start() throws Exception {
+    public void start() {
         addAccounts();
-        getIterations();
+        executeConcurrentTransaction();
+    }
+
+    public String getRandomNumAcc() {
+        return ACC_NUM_PATTERN + random.nextInt(countAccounts);
+    }
+
+    public void executeConcurrentTransaction() {
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime()
+                .availableProcessors());
+
+        for (int i = 0; i < countIterations; i++) {
+            long randomAmount = Math.round(50000 * Math.random());
+            String from = getRandomNumAcc();
+            String to = getRandomNumAcc();
+
+            executor.submit(() -> {
+                try {
+                    bank.transfer(from, to, randomAmount);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        executor.shutdown();
     }
 }
 
