@@ -6,13 +6,14 @@ public class Bank {
     private final HashMap<String, Account> blackList = new HashMap<>();
     private final Random random = new Random();
     private final long MAX_AMOUNT_TRANSACTION = 50000;
+    private final Object objectForSynchronized = new Object();
 
     private synchronized boolean isFraud() throws InterruptedException {
         Thread.sleep(1000);
         return random.nextBoolean();
     }
 
-    public void transfer(String fromAccountNum, String toAccountNum, long amount) throws Exception {
+    public void transfer(String fromAccountNum, String toAccountNum, long amount) {
         if (fromAccountNum.equals(toAccountNum)) {
             System.out.println("Невозможно осуществить перевод на один и тот же счёт!");
             return;
@@ -42,8 +43,10 @@ public class Bank {
             return;
         }
 
-        from.setMoney(from.getMoney() - amount);
-        to.setMoney(to.getMoney() + amount);
+        synchronized (objectForSynchronized) {
+            from.setMoney(from.getMoney() - amount);
+            to.setMoney(to.getMoney() + amount);
+        }
 
         System.out.printf("%s - отправка %d руб. С %s на %s. Состояние счета %s"
                         + " - %d руб., состояние счета %s - %d руб.%n",
@@ -61,24 +64,33 @@ public class Bank {
         }
     }
 
-    public long getBalance(String accountNum) throws Exception {
-        Account account = getAccountFromAccNum(accountNum);
-
-        if (account == null) {
-            throw new Exception("Введенный счет: " + accountNum + " не найден в базе");
-        }
-
-        return account.getMoney();
-    }
-
     private void addToBlockMap(Account from, Account to) {
         blackList.put(from.getAccNumber(), from);
         blackList.put(to.getAccNumber(), to);
     }
 
+    public long getSum() {
+        return accounts.values()
+                .stream()
+                .mapToLong(Account::getMoney)
+                .sum();
+    }
+
     private Account getAccountFromAccNum(String accNum) {
         return accounts.get(accNum);
     }
+
+    public Long getBalance(String accountNum) {
+        Account account = getAccountFromAccNum(accountNum);
+
+        if (account == null) {
+            System.out.println("Введенный счет: " + accountNum + " не найден в базе");
+            return null;
+        }
+
+        return account.getMoney();
+    }
+
 
     public void addAccount(String accNum, long initialBalance) {
         accounts.put(accNum, new Account(accNum, initialBalance));
