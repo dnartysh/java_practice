@@ -6,7 +6,7 @@ public class Bank {
     private final HashMap<String, Account> blackList = new HashMap<>();
     private final Random random = new Random();
     private final long MAX_AMOUNT_TRANSACTION = 50000;
-    private final Object objectForSynchronized = new Object();
+
 
     private synchronized boolean isFraud() throws InterruptedException {
         Thread.sleep(1000);
@@ -43,9 +43,11 @@ public class Bank {
             return;
         }
 
-        synchronized (objectForSynchronized) {
+        synchronized (from) {
             from.setMoney(from.getMoney() - amount);
-            to.setMoney(to.getMoney() + amount);
+            synchronized (to) {
+                to.setMoney(to.getMoney() + amount);
+            }
         }
 
         System.out.printf("%s - отправка %d руб. С %s на %s. Состояние счета %s"
