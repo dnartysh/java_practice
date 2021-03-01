@@ -4,12 +4,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Test {
-    private Bank bank;
-    private int countAccounts;
-    private int countIterations;
+    private final Bank bank;
+    private final int countAccounts;
+    private final int countIterations;
     private final long initialBalance = 100000;
     private final String ACC_NUM_PATTERN = "1-";
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public Test(Bank bank, int countAccounts, int countIterations) {
         this.bank = bank;
@@ -48,7 +48,13 @@ public class Test {
             String from = getRandomNumAcc();
             String to = getRandomNumAcc();
 
-            executor.submit(() -> {bank.transfer(from, to, randomAmount);});
+            executor.submit(() -> {
+                try {
+                    bank.transfer(from, to, randomAmount);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
         }
 
         executor.shutdown();

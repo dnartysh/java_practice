@@ -23,4 +23,12 @@ public class Account
     public void setAccNumber(String accNumber) {
         this.accNumber = accNumber;
     }
+
+    public void withdraw(long amount) {
+        this.money -= amount;
+    }
+
+    public void put(long amount) {
+        this.money += amount;
+    }
 }

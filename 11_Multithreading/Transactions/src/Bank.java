@@ -2,6 +2,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Bank {
+
     private final HashMap<String, Account> accounts = new HashMap<>();
     private final HashMap<String, Account> blackList = new HashMap<>();
     private final Random random = new Random();
@@ -13,40 +14,43 @@ public class Bank {
         return random.nextBoolean();
     }
 
-    public void transfer(String fromAccountNum, String toAccountNum, long amount) {
+    public void transfer(String fromAccountNum, String toAccountNum, long amount)
+            throws InterruptedException {
         if (fromAccountNum.equals(toAccountNum)) {
-            System.out.println("Невозможно осуществить перевод на один и тот же счёт!");
-            return;
+            throw new InterruptedException("Невозможно осуществить перевод на один и тот же счёт!");
         }
 
         Account from = getAccountFromAccNum(fromAccountNum);
         Account to = getAccountFromAccNum(toAccountNum);
 
         if (from == null || to == null) {
-            System.out.println("Счет: " + (from == null ? fromAccountNum : toAccountNum) +
+            throw new InterruptedException("Счет: " + (from == null ? fromAccountNum : toAccountNum) +
                     " не найден!");
-             return;
         }
 
         boolean fromInBlackList = blackList.containsValue(from);
         boolean toInBlackList = blackList.containsValue(to);
 
-        if (fromInBlackList || toInBlackList) {
-            System.out.println("Счет: " + (fromInBlackList ?
-                    fromAccountNum : toAccountNum) + " заблокирован!");
-            return;
-        }
-
-        if (amount > from.getMoney()) {
-            System.out.println("На счете: " + fromAccountNum +
-                    " недостаточно средств для перевода!");
-            return;
-        }
-
         synchronized (from) {
-            from.setMoney(from.getMoney() - amount);
             synchronized (to) {
-                to.setMoney(to.getMoney() + amount);
+                if (fromInBlackList || toInBlackList) {
+                    throw new InterruptedException("Счет: " + (fromInBlackList ?
+                            fromAccountNum : toAccountNum) + " заблокирован!");
+                }
+
+                if (amount > from.getMoney()) {
+                    throw new InterruptedException("На счете: " + fromAccountNum +
+                            " недостаточно средств для перевода!");
+                }
+
+                from.withdraw(amount);
+                to.put(amount);
+
+                if (amount > MAX_AMOUNT_TRANSACTION) {
+                    if (isFraud()) {
+                        addToBlockMap(from, to);
+                    }
+                }
             }
         }
 
@@ -54,16 +58,6 @@ public class Bank {
                         + " - %d руб., состояние счета %s - %d руб.%n",
                 Thread.currentThread().getName(), amount, fromAccountNum, toAccountNum,
                 fromAccountNum, getBalance(fromAccountNum), toAccountNum, getBalance(toAccountNum));
-
-        if (amount > MAX_AMOUNT_TRANSACTION) {
-            try {
-                if (isFraud()) {
-                    addToBlockMap(from, to);
-                }
-            } catch (InterruptedException ex) {
-                ex.printStackTrace(System.out);
-            }
-        }
     }
 
     private void addToBlockMap(Account from, Account to) {
