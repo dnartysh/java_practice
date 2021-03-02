@@ -1,3 +1,4 @@
+import javax.security.auth.login.AccountNotFoundException;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -14,32 +15,38 @@ public class Bank {
         return random.nextBoolean();
     }
 
-    public void transfer(String fromAccountNum, String toAccountNum, long amount)
-            throws InterruptedException {
+    public void transfer(String fromAccountNum, String toAccountNum, long amount) {
         if (fromAccountNum.equals(toAccountNum)) {
-            throw new InterruptedException("Невозможно осуществить перевод на один и тот же счёт!");
+            System.out.println("Невозможно осуществить перевод на один и тот же счёт!");
         }
 
         Account from = getAccountFromAccNum(fromAccountNum);
         Account to = getAccountFromAccNum(toAccountNum);
 
         if (from == null || to == null) {
-            throw new InterruptedException("Счет: " + (from == null ? fromAccountNum : toAccountNum) +
+            System.out.println("Счет: " + (from == null ? fromAccountNum : toAccountNum) +
                     " не найден!");
         }
 
         boolean fromInBlackList = blackList.containsValue(from);
         boolean toInBlackList = blackList.containsValue(to);
+        Account lowAccount = to;
+        Account topAccount = from;
 
-        synchronized (from) {
-            synchronized (to) {
+        if (from.hashCode() > to.hashCode()) {
+            lowAccount = from;
+            topAccount = to;
+        }
+
+        synchronized (lowAccount) {
+            synchronized (topAccount) {
                 if (fromInBlackList || toInBlackList) {
-                    throw new InterruptedException("Счет: " + (fromInBlackList ?
+                    System.out.println("Счет: " + (fromInBlackList ?
                             fromAccountNum : toAccountNum) + " заблокирован!");
                 }
 
                 if (amount > from.getMoney()) {
-                    throw new InterruptedException("На счете: " + fromAccountNum +
+                    System.out.println("На счете: " + fromAccountNum +
                             " недостаточно средств для перевода!");
                 }
 
@@ -47,9 +54,14 @@ public class Bank {
                 to.put(amount);
 
                 if (amount > MAX_AMOUNT_TRANSACTION) {
-                    if (isFraud()) {
-                        addToBlockMap(from, to);
+                    try {
+                        if (isFraud()) {
+                            addToBlockMap(from, to);
+                        }
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace(System.out);
                     }
+
                 }
             }
         }
