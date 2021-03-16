@@ -1,5 +1,3 @@
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,29 +16,17 @@ public class MapSite {
         return new MapSiteRecursive(root).invoke();
     }
 
-    public void saveFile(String path) {
+    public List<String> getMap() {
         HashSet<String> list = parse();
-
         int depth = getMinCountSlash(list);
 
         buildMap(list, depth);
 
         if (completeMap.size() > 0) {
-            try {
-                FileOutputStream fos = new FileOutputStream(path);
-                completeMap.forEach((str) -> {
-                    try {
-                        fos.write(str.getBytes());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-
-                System.out.printf("File has been saved to '%s'", path);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            return completeMap;
         }
+
+        return null;
     }
 
     private void buildMap(HashSet<String> list, int depth) {
@@ -51,7 +37,6 @@ public class MapSite {
         if (depth <= maxCount) {
             for (String str : listUrls) {
                 if (completeMap.contains(getTab(countTab + 1) + str + "\n")) {
-                    System.out.println("LALALA");
                     continue;
                 }
 
@@ -65,7 +50,7 @@ public class MapSite {
 
     private void addChildUrl(String url, HashSet<String> list, int countTab) {
         List<String> listChild = list.stream()
-                .filter(str -> str.matches(url + ".+"))
+                .filter(str -> str.matches(url + ".+$"))
                 .collect(Collectors.toList());
 
         if (listChild.size() > 0) {
