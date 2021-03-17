@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class MapSiteRecursive extends RecursiveTask<HashSet<String>> {
-    private String root;
-    private HashSet<String> listUrls;
+    private final String root;
+    private final HashSet<String> listUrls;
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_GREEN = "\u001B[32m";
     private static final String ANSI_YELLOW = "\u001B[33m";

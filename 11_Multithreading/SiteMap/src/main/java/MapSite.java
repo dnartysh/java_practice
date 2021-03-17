@@ -16,17 +16,17 @@ public class MapSite {
         return new MapSiteRecursive(root).invoke();
     }
 
-    public List<String> getMap() {
+    public List<String> getMap() throws MapNotParsedException {
         HashSet<String> list = parse();
         int depth = getMinCountSlash(list);
 
         buildMap(list, depth);
 
-        if (completeMap.size() > 0) {
-            return completeMap;
+        if (completeMap.isEmpty()) {
+            throw new MapNotParsedException();
         }
 
-        return null;
+        return completeMap;
     }
 
     private void buildMap(HashSet<String> list, int depth) {
@@ -103,5 +103,15 @@ public class MapSite {
         String tab = "\t".repeat(countTab);
 
         return tab;
+    }
+}
+
+class MapNotParsedException extends Exception {
+    public MapNotParsedException() {
+        super();
+    }
+
+    public MapNotParsedException(String s) {
+        super(s);
     }
 }

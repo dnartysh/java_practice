@@ -10,7 +10,7 @@ public class Loader {
 
         try {
             Files.write(Path.of("src/main/files/mapSite.txt"), mapSite.getMap().toString().getBytes());
-        } catch (IOException ex) {
+        } catch (IOException | MapNotParsedException ex) {
             ex.printStackTrace();
         }
     }
