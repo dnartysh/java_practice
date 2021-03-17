@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DefaultController {
 
     @RequestMapping("/")
-    public double getDate() {
+    public double getRandom() {
         return Math.random();
     }
 
