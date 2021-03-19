@@ -18,7 +18,7 @@ public class Task {
     private int id;
     private String name;
     private Date createDate;
-    private String executor;
+    private String responsiblePerson;
     private boolean isComplete;
 
     public Task(int id) {
