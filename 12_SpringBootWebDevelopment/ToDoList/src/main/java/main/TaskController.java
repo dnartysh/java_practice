@@ -1,66 +1,93 @@
 package main;
 
-import models.Task;
+import main.model.Task;
+import main.model.TaskRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class TaskController {
-
-    private final Storage storage;
-
-    public TaskController(Storage storage) {
-        this.storage = storage;
-    }
+    @Autowired
+    private TaskRepository taskRepository;
 
     @PostMapping("/tasks")
     private ResponseEntity<?> add(@RequestParam(value = "name") String name,
-                               @RequestParam(value = "exec") String executor) {
-        return new ResponseEntity<>(storage.addTask(name, executor), HttpStatus.CREATED);
+                               @RequestParam(value = "person") String person) {
+        Task task = taskRepository.save(new Task(name, person));
+
+        return new ResponseEntity<>(task, HttpStatus.CREATED);
     }
 
     @GetMapping("/tasks/{id}")
     private ResponseEntity<?> get(@PathVariable int id) {
-        Task task = storage.getTask(id);
-        if (task == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        Optional<Task> optionalTask = taskRepository.findById(id);
+
+        if (optionalTask.isPresent()) {
+            return new ResponseEntity<>(optionalTask.get(), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(task, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
+
 
     @GetMapping("/tasks")
     private List<Task> getAll() {
-        return storage.getTasks();
+        List<Task> listTasks = new ArrayList<>();
+        taskRepository.findAll().forEach(listTasks::add);
+
+        return listTasks;
     }
 
     @PutMapping("/tasks/{id}")
     private ResponseEntity<?> update(@PathVariable int id,
                                   @RequestParam(value = "name") String name,
-                                  @RequestParam(value = "exec") String executor,
+                                  @RequestParam(value = "person") String person,
                                   @RequestParam(value = "complete", required = false) boolean complete) {
-        Task task = storage.updateTask(id, name, executor, complete);
-        if (task == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        Optional<Task>  optionalTask = taskRepository.findById(id);
+        if (optionalTask.isPresent()) {
+            Task task = optionalTask.get();
+
+            task.setName(name);
+            task.setPerson(person);
+            task.setComplete(complete);
+
+            taskRepository.save(task);
+
+            return new ResponseEntity<>(task, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(task, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/tasks")
     private ResponseEntity<?> updateAll(@RequestParam(value = "name") String name,
-                                     @RequestParam(value = "exec") String responsiblePerson,
+                                     @RequestParam(value = "person") String person,
                                      @RequestParam(value = "complete", required = false) boolean complete) {
-        storage.updateAllTasks(name, responsiblePerson, complete);
-        return ResponseEntity.status(HttpStatus.OK).body(Task.class);
+        List<Task> tasks = new ArrayList<>();
+        taskRepository.findAll().forEach(tasks::add);
+
+        tasks.forEach(task -> {
+            task.setName(name);
+            task.setPerson(person);
+            task.setComplete(complete);
+            taskRepository.save(task);
+        });
+
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @DeleteMapping("/tasks/{id}")
     private ResponseEntity<?> delete(@PathVariable int id) {
-        if (storage.removeTask(id)) {
+        Optional<Task> taskOptional = taskRepository.findById(id);
+
+        if (taskOptional.isPresent()) {
+            taskRepository.delete(taskOptional.get());
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
 
@@ -69,7 +96,11 @@ public class TaskController {
 
     @DeleteMapping("/tasks")
     private ResponseEntity<?> deleteAll() {
-        storage.removeAllTasks();
+        List<Task> tasks = new ArrayList<>();
+        taskRepository.findAll().forEach(tasks::add);
+
+        tasks.forEach(task -> taskRepository.delete(task));
+
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

@@ -1,7 +1,6 @@
 package main;
 
-import models.Task;
-import org.springframework.stereotype.Service;
+import main.model.Task;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Service
 public class Storage {
     private final AtomicInteger taskId;
     private final HashMap<Integer, Task> tasks;
@@ -20,10 +18,10 @@ public class Storage {
         System.out.println("Storage service started...");
     }
 
-    public Task addTask(String name, String responsiblePerson) {
+    public Task addTask(String name, String person) {
         Task task = new Task(taskId.incrementAndGet());
         task.setName(name);
-        task.setResponsiblePerson(responsiblePerson);
+        task.setPerson(person);
         task.setCreateDate(new Date());
         task.setComplete(false);
         tasks.put(task.getId(), task);
@@ -32,11 +30,7 @@ public class Storage {
     }
 
     public Task getTask(int id) {
-        if (tasks.containsKey(id)) {
-            return tasks.get(id);
-        }
-
-        return null;
+        return tasks.get(id);
     }
 
     public List<Task> getTasks() {
@@ -56,7 +50,7 @@ public class Storage {
         tasks.clear();
     }
 
-    public synchronized Task updateTask(int id, String name, String responsiblePerson, boolean complete) {
+    public synchronized Task updateTask(int id, String name, String person, boolean complete) {
         Task task = tasks.get(id);
 
         if (task == null) {
@@ -64,17 +58,17 @@ public class Storage {
         }
 
         task.setName(name);
-        task.setResponsiblePerson(responsiblePerson);
+        task.setPerson(person);
         task.setComplete(complete);
 
         return task;
     }
 
-    public void updateAllTasks(String name, String responsiblePerson, boolean complete) {
+    public void updateAllTasks(String name, String person, boolean complete) {
         synchronized (tasks) {
             tasks.forEach((integer, task) -> {
                 task.setName(name);
-                task.setResponsiblePerson(responsiblePerson);
+                task.setPerson(person);
                 task.setComplete(complete);
             });
         }
