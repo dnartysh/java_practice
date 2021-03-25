@@ -20,7 +20,7 @@ public class TaskService {
     }
 
     public Task getById(int id) {
-        return taskRepository.findById(id).get();
+        return taskRepository.findById(id).orElse(null);
     }
 
     public List<Task> getByName(String name) {
