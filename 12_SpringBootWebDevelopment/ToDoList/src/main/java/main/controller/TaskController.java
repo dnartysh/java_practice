@@ -1,5 +1,7 @@
 package main.controller;
 
+import java.util.List;
+import main.model.Task;
 import main.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,14 +27,18 @@ public class TaskController {
 
     @GetMapping("/tasks/{id}")
     private ResponseEntity<?> get(@PathVariable int id) {
-        Object obj = taskService.getById(id);
-        return new ResponseEntity<>(obj, obj == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+        Task task = taskService.getById(id);
+        return new ResponseEntity<>(task, task == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
     @GetMapping("/tasks")
-    private ResponseEntity<?> getAll(@RequestParam(name = "query", required = false) String name) {
-        Object obj = name == null ? taskService.getAll() : taskService.getByName(name);
-        return new ResponseEntity<>(obj, HttpStatus.OK);
+    private ResponseEntity<?> getAll() {
+        return new ResponseEntity<>(taskService.getAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/tasks/search")
+    private ResponseEntity<?> getSearch(@RequestParam("query") String name) {
+        return new ResponseEntity<>(taskService.getByName(name), HttpStatus.OK);
     }
 
     @PutMapping("/tasks/{id}")
@@ -40,8 +46,8 @@ public class TaskController {
                                   @RequestParam(value = "name") String name,
                                   @RequestParam(value = "person") String person,
                                   @RequestParam(value = "complete", required = false) boolean complete) {
-        Object obj = taskService.updateById(id, name, person, complete);
-        return new ResponseEntity<>(obj, obj == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+        Task task = taskService.updateById(id, name, person, complete);
+        return new ResponseEntity<>(task, task == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
     @PutMapping("/tasks")
