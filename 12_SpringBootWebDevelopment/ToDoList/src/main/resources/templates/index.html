@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo List</title>
+    <script src="/js/jquery-3.6.0.js"></script>
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+
+<body>
+    <div id="task-form">
+        <form>
+            <h2>Adding task</h2>
+            <label>Name:</label>
+            <input type="text" name="name" value="">
+            <label>Author:</label>
+            <input type="text" name="person" value="">
+            <hr>
+            <button id="save-task">Save</button>
+        </form>
+    </div>
+    <div id="detail-task-form">
+        <form>
+            <h2>Task detail info</h2>
+            <p></p>
+            <label>Name: <input id="input-name" type="text" name="name"></label>
+            <p></p>
+            <label>Author: <input id="input-person" type="text" name="person"></label>
+            <p></p>
+            <label>Complete: <input id="input-complete" type="checkbox" name="complete"></label>
+            <p></p>
+            <button id="update-task">Save</button>
+            <button id="delete-task">Delete</button>
+            <button id="update-all-tasks">Update all</button>
+        </form>
+    </div>
+    <h1>List of tasks (<span th:text="${tasksCount}">0</span>)</h1>
+    <button id="show-add-task-form">Add task</button>
+    <button id="delete-all-tasks">Delete all</button>
+    <br><br>
+    <div id="tasks-list">
+        <table>
+            <td>Task name</td>
+            <td>Author</td>
+            <td>Complete</td>
+            <div th:each="task : ${tasks}">
+                <tr>
+                    <td><a href="#" class="task-link" th:attr="data-id=${task.id}" th:text="${task.name}"></a></td>
+                    <td><p th:text="${task.person}">-</p></td>
+                    <td><p th:text="${task.complete}">-</p></td>
+                </tr>
+            </div>
+        </table>
+    </div>
+</body>
+
+</html>
