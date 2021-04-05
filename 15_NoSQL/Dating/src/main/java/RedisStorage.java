@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Date;
 import org.redisson.Redisson;
 import org.redisson.api.RKeys;
@@ -31,28 +30,25 @@ public class RedisStorage {
     }
 
     public void printAccounts() throws InterruptedException {
-        ArrayList<Integer> vipList = new ArrayList<>();
+        topAccounts = redisson.getScoredSortedSet(KEY);
 
         for (Integer value : topAccounts) {
-            Thread.sleep(400);
-            if (isRandom()) {
-                int id = getVipAccountID(value);
-                System.out.printf("Пользователь: %d оплатил услугу\nПользователь: %d\n", id, id);
-                vipList.add(id);
+            Thread.sleep(200);
 
-                if (value != id && vipList.contains(value)) {
-                    System.out.printf("Пользователь: %d\n", value);
-                }
-            } else {
-                if (!vipList.contains(value)) {
-                    System.out.printf("Пользователь: %d\n", value);
-                }
+            if (isRandom()) {
+                int idTop = getVipAccountID(value);
+                System.out.printf("Пользователь %d оплатил услугу\n", idTop);
+                topAccounts.add(getDate(), idTop);
+            }
+
+            if (!topAccounts.valueRange(value, topAccounts.size()).contains(value)) {
+                System.out.printf("Пользователь %d\n", value);
             }
         }
     }
 
     private boolean isRandom() {
-        return Math.random() < 0.2;
+        return Math.random() < 0.1;
     }
 
     private double getDate() {

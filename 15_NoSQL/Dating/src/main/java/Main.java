@@ -6,11 +6,11 @@ public class Main {
         RedisStorage redisStorage = new RedisStorage();
         redisStorage.init();
 
-        for (int i = 1; i <= COUNT_ACCOUNTS; i++) {
-            redisStorage.addAccount(i);
-        }
-
         while (true) {
+            for (int i = 1; i <= COUNT_ACCOUNTS; i++) {
+                redisStorage.addAccount(i);
+            }
+
             System.out.printf("\nPass #%d\n", pass);
             Thread.sleep(1000);
             redisStorage.printAccounts();
