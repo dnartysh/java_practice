@@ -60,11 +60,7 @@ public class MongoExchange {
         MongoCollection<Document> collection = DATABASE.getCollection(collectionName);
         collection.drop();
 
-        List<Document> listDocs = getListOfDocuments(filePath);
-
-        for (Document doc : listDocs) {
-            collection.insertOne(doc);
-        }
+        collection.insertMany(getListOfDocuments(filePath));
     }
 
     public void printCountDocs(String collectionName) {
