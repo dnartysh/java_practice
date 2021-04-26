@@ -2,10 +2,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class MyRun implements Runnable {
-    private final String path;
 
-    public MyRun(String path) {
+    private final String path;
+    private final int currentRegion;
+
+    public MyRun(String path, int currentRegion) {
         this.path = path;
+        this.currentRegion = currentRegion;
     }
 
     @Override
@@ -16,25 +19,25 @@ public class MyRun implements Runnable {
             FileWriter writer = new FileWriter(path);
 
             char letters[] = {'У', 'К', 'Е', 'Н', 'Х', 'В', 'А', 'Р', 'О', 'С', 'М', 'Т'};
-            for (int regionCode = 50; regionCode < 200; regionCode++) {
-                StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
+            String region = padNumber(currentRegion, 2);
 
-                for (int number = 1; number < 1000; number++) {
-                    for (char firstLetter : letters) {
-                        for (char secondLetter : letters) {
-                            for (char thirdLetter : letters) {
-                                sb.append(firstLetter).append(padNumber(number, 3))
-                                        .append(secondLetter).append(thirdLetter)
-                                        .append(padNumber(regionCode, 2))
-                                        .append("\n");
-                            }
+            for (int number = 1; number < 1000; number++) {
+                String numberValue = padNumber(number, 3);
+
+                for (char firstLetter : letters) {
+                    for (char secondLetter : letters) {
+                        for (char thirdLetter : letters) {
+                            sb.append(firstLetter).append(numberValue)
+                                    .append(secondLetter).append(thirdLetter)
+                                    .append(region)
+                                    .append("\n");
                         }
                     }
                 }
-
-                writer.write(sb.toString());
             }
 
+            writer.write(sb.toString());
             writer.flush();
             writer.close();
 
