@@ -1,7 +1,8 @@
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -15,17 +16,29 @@ import org.xml.sax.SAXException;
 
 public class Loader {
 
-    private static SimpleDateFormat birthDayFormat = new SimpleDateFormat("yyyy.MM.dd");
-    private static SimpleDateFormat visitDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-
     public static void main(String[] args) throws Exception {
-        String fileName = "res/data-18M.xml";
+        String fileName = "res/data-1572M.xml";
 
-        DOMParseFile(fileName);
-        Storage.dropAll();
+//        DOMParseFile(fileName);
+//        Storage.dropAll();
 
         SAXParseFile(fileName);
+        loadToDB();
         Storage.dropAll();
+    }
+
+    private static void loadToDB() throws SQLException {
+        HashMap<Voter, Integer> list = Storage.getVoterCounts();
+
+        long start = System.currentTimeMillis();
+
+        for (Map.Entry<Voter, Integer> item : list.entrySet()) {
+            DBConnection.countVoter(item.getKey().getName(), item.getKey().getBirthDay());
+        }
+
+        DBConnection.executeMultiInsert();
+
+        System.out.printf("Обработка завершена за - %d мс", System.currentTimeMillis() - start);
     }
 
     private static void printResults(String message) {
@@ -80,8 +93,7 @@ public class Loader {
             NamedNodeMap attributes = node.getAttributes();
 
             String name = attributes.getNamedItem("name").getNodeValue();
-            Date birthDay = birthDayFormat
-                .parse(attributes.getNamedItem("birthDay").getNodeValue());
+            long birthDay = getBirthdayLong(attributes.getNamedItem("birthDay").getNodeValue());
 
             Voter voter = new Voter(name, birthDay);
             Integer count = Storage.getVoterCounts().get(voter);
@@ -92,18 +104,28 @@ public class Loader {
     private static void fixWorkTimes(Document doc) throws Exception {
         NodeList visits = doc.getElementsByTagName("visit");
         int visitCount = visits.getLength();
+
         for (int i = 0; i < visitCount; i++) {
             Node node = visits.item(i);
             NamedNodeMap attributes = node.getAttributes();
 
             Integer station = Integer.parseInt(attributes.getNamedItem("station").getNodeValue());
-            Date time = visitDateFormat.parse(attributes.getNamedItem("time").getNodeValue());
+            long time = getBirthdayLong(attributes.getNamedItem("time").getNodeValue());
             WorkTime workTime = Storage.getVoteStationWorkTimes().get(station);
+
             if (workTime == null) {
                 workTime = new WorkTime();
                 Storage.addStation(station, workTime);
             }
-            workTime.addVisitTime(time.getTime());
+
+            workTime.addVisitTime(time);
         }
+    }
+
+    private static long getBirthdayLong(String input) {
+        input = input.replace(".", "").replace(" ", "")
+                .replace(":", "");
+
+        return Long.parseLong(input);
     }
 }

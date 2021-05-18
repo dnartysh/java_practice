@@ -3,56 +3,37 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TimePeriod implements Comparable<TimePeriod> {
-
     private long from;
     private long to;
 
-    /**
-     * Time period within one day
-     *
-     * @param from
-     * @param to
-     */
     public TimePeriod(long from, long to) {
         this.from = from;
         this.to = to;
-        SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy.MM.dd");
-        if (!dayFormat.format(new Date(from)).equals(dayFormat.format(new Date(to)))) {
+
+        if (from != to) {
             throw new IllegalArgumentException("Dates 'from' and 'to' must be within ONE day!");
         }
     }
 
-    public TimePeriod(Date from, Date to) {
-        this.from = from.getTime();
-        this.to = to.getTime();
-        SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy.MM.dd");
-        if (!dayFormat.format(from).equals(dayFormat.format(to))) {
-            throw new IllegalArgumentException("Dates 'from' and 'to' must be within ONE day!");
-        }
-    }
-
-    public void appendTime(Date visitTime) {
+    public void appendTime(long visitTime) {
         SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy.MM.dd");
         if (!dayFormat.format(new Date(from))
-            .equals(dayFormat.format(new Date(visitTime.getTime())))) {
+            .equals(dayFormat.format(new Date(visitTime)))) {
             throw new IllegalArgumentException(
                 "Visit time must be within the same day as the current TimePeriod!");
         }
-        long visitTimeTs = visitTime.getTime();
-        if (visitTimeTs < from) {
-            from = visitTimeTs;
+
+        if (visitTime < from) {
+            from = visitTime;
         }
-        if (visitTimeTs > to) {
-            to = visitTimeTs;
+        if (visitTime > to) {
+            to = visitTime;
         }
     }
 
     public String toString() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        String from = dateFormat.format(this.from);
-        String to = timeFormat.format(this.to);
-        return from + "-" + to;
+        return String.valueOf(from).substring(0, 8) + " " + String.valueOf(from).substring(8)
+                + " - " + String.valueOf(to).substring(0, 8) + " " + String.valueOf(to).substring(8);
     }
 
     @Override
@@ -66,6 +47,7 @@ public class TimePeriod implements Comparable<TimePeriod> {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         return current.compareTo(compared);
     }
 }

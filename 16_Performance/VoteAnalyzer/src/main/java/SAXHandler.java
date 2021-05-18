@@ -1,18 +1,13 @@
-import java.text.SimpleDateFormat;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class SAXHandler extends DefaultHandler {
-
-    private static SimpleDateFormat birthDayFormat = new SimpleDateFormat("yyyy.MM.dd");
-    private static SimpleDateFormat visitDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         try {
             if (qName.equals("voter")) {
                 Voter voter = new Voter(attributes.getValue(0),
-                        birthDayFormat.parse(attributes.getValue(1)));
+                        getBirthdayLong(attributes.getValue(1)));
                 Integer count = Storage.getVoterCounts().get(voter);
                 Storage.addVoter(voter, count == null ? 1 : count + 1);
             } else if (qName.equals("visit")) {
@@ -25,10 +20,17 @@ public class SAXHandler extends DefaultHandler {
                     Storage.addStation(stationNumber, wt);
                 }
 
-                wt.addVisitTime(visitDateFormat.parse(attributes.getValue(1)).getTime());
+                wt.addVisitTime(getBirthdayLong(attributes.getValue(1)));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private long getBirthdayLong(String input) {
+        input = input.replace(".", "").replace(" ", "")
+        .replace(":", "");
+
+        return Long.parseLong(input);
     }
 }
